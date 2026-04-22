@@ -194,30 +194,39 @@
   }
   .knowledge-card h2::before { content: '📚'; -webkit-text-fill-color: initial; }
   .knowledge-card .lead { font-size: .88em; color: var(--text-dim); margin-bottom: 22px; }
-  .knowledge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .knowledge-item {
+  .k-main {
     background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
-    padding: 20px 22px;
+    padding: 22px 24px; margin-bottom: 16px;
   }
-  .knowledge-item h3 {
-    font-size: .94em; font-weight: 700; color: var(--text); margin-bottom: 8px;
-    display: flex; align-items: center; gap: 6px;
+  .k-main h3 {
+    font-size: .98em; font-weight: 700; color: var(--text); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
   }
-  .knowledge-item p { font-size: .88em; color: var(--text-secondary, var(--text-dim)); line-height: 1.7; }
-  .knowledge-item .k-badge {
+  .k-main > p { font-size: .88em; color: var(--text-dim); line-height: 1.7; margin-bottom: 0; }
+  .k-badge {
     display: inline-block; padding: 2px 8px; border-radius: 5px;
     font-size: .78em; font-weight: 600;
   }
   .k-pearl { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
   .k-tiko { background: var(--cyan-bg); color: var(--cyan); border: 1px solid var(--cyan-border); }
-  .k-workspace { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
-  .k-framework { background: var(--orange-bg); color: var(--orange); border: 1px solid var(--orange-border); }
-  .knowledge-note {
-    margin-top: 18px; padding: 16px 20px; border-radius: 10px;
-    background: rgba(123,138,255,0.06); border: 1px solid rgba(123,138,255,0.2);
-    font-size: .86em; color: var(--text-dim); line-height: 1.7;
+  .k-sub-label {
+    font-size: .78em; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+    color: var(--text-light); margin: 16px 0 10px; padding-top: 14px;
+    border-top: 1px solid var(--border);
   }
-  .knowledge-note strong { color: var(--accent); }
+  .k-sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .k-sub {
+    background: var(--surface3); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .k-sub h4 {
+    font-size: .86em; font-weight: 700; color: var(--text-secondary); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .k-sub p { font-size: .84em; color: var(--text-dim); line-height: 1.65; margin: 0; }
+  .k-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .k-dot.green { background: var(--green); }
+  .k-dot.orange { background: var(--orange); }
 
   /* Footer */
   .footer {
@@ -234,8 +243,8 @@
     .report-grid { padding: 16px 16px 32px; grid-template-columns: 1fr; }
     .tab-bar { padding: 16px 16px 6px; }
     .knowledge-section { padding: 0 16px 36px; }
-    .knowledge-grid { grid-template-columns: 1fr; }
     .knowledge-card { padding: 26px 22px; }
+    .k-sub-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -302,27 +311,25 @@
     <h2>关于运营中台</h2>
     <p class="lead">本站所有报告的分析视角均基于以下业务背景。了解这些概念有助于理解每篇报告中"对运营中台的启发"部分。</p>
 
-    <div class="knowledge-grid">
-      <div class="knowledge-item">
-        <h3><span class="k-badge k-pearl">Pearl</span> 运营工作台</h3>
-        <p>Pearl 是 TikTok Shop 运营中台的核心工作台，承载 1000+ Web Tool，服务全球 AM（Account Manager）的日常运营工作。当前正在从"工具黄页"升级为 AI Native 平台——以 CUI（对话式交互）为主入口，支持 Workspace 分场景工作、Canvas 画布组件、Copilot 辅助模式。</p>
-      </div>
-      <div class="knowledge-item">
-        <h3><span class="k-badge k-tiko">Tiko</span> AI 运营助手</h3>
-        <p>Tiko 是运营中台的 AI 助手，当前以飞书机器人形态运行，正在迁移至 Pearl 首页成为 Web 端全屏版。擅长解决商家经营问题、回答业务知识、调用垂域 Skill 查询数据。在 Pearl 2.0 中将成为所有 AI Native 能力的统一入口。</p>
-      </div>
-      <div class="knowledge-item">
-        <h3><span class="k-badge k-workspace">Workspace</span> 工作空间</h3>
-        <p>Pearl 2.0 引入的分场景工作空间概念。每个 Workspace 对应一类运营职能，拥有独立的 Skill 召回范围和上下文积累。Q2 计划建设 3 个：Analysis（经营分析）、DeRisk（经营降险）、Campaign（大促管理）。</p>
-      </div>
-      <div class="knowledge-item">
-        <h3><span class="k-badge k-framework">应用框架</span> 四层分类</h3>
-        <p>Pearl 2.0 将所有应用分为 4 类：<strong style="color:var(--cyan)">AI Native</strong>（CUI 为主，如 Tiko）→ <strong style="color:var(--green)">AI Accessible</strong>（GUI 但 AI 可读取页面数据）→ <strong style="color:var(--orange)">AI Enabled</strong>（GUI + Copilot 副驾）→ <strong style="color:var(--text-dim)">Non-AI</strong>（传统工具）。支持从旧范式向新范式渐进演进。</p>
+    <div class="k-main">
+      <h3><span class="k-badge k-pearl">Pearl</span> 运营工作台</h3>
+      <p>Pearl 是 TikTok Shop 运营中台的核心工作台，承载 1000+ Web Tool，服务全球 AM（Account Manager）的日常运营工作。当前正在从传统工具集合升级为 AI Native 平台，以 CUI（对话式交互）为主入口，同时兼容存量 GUI 工具。</p>
+      <div class="k-sub-label">Pearl 2.0 升级方向 ↓</div>
+      <div class="k-sub-grid">
+        <div class="k-sub">
+          <h4><span class="k-dot green"></span> Workspace 工作空间</h4>
+          <p>按运营场景划分的沉浸式工作空间。每个 Workspace 拥有独立的 Skill 范围和上下文积累。Q2 计划：Analysis（经营分析）、DeRisk（经营降险）、Campaign（大促管理）。</p>
+        </div>
+        <div class="k-sub">
+          <h4><span class="k-dot orange"></span> 应用四层分类</h4>
+          <p>AI Native（CUI 为主）→ AI Accessible（AI 可读取页面）→ AI Enabled（GUI + Copilot 副驾）→ Non-AI（传统工具）。支持从旧范式向新范式渐进演进。</p>
+        </div>
       </div>
     </div>
 
-    <div class="knowledge-note">
-      <strong>为什么关注 AI 产品趋势？</strong> 运营中台正处于 AI 化转型的关键窗口期。每周的 AI 产品趋势报告帮助团队追踪行业最新架构和体验创新，将外部 Best Practice 翻译为内部可落地的方案，加速 Pearl 2.0 和 Tiko 的产品迭代。
+    <div class="k-main">
+      <h3><span class="k-badge k-tiko">Tiko</span> AI 运营助手</h3>
+      <p>Tiko 是运营中台的 AI 助手，当前以飞书机器人形态运行，正在迁移至 Pearl 首页成为 Web 端全屏版。擅长解决商家经营问题、回答业务知识、调用垂域 Skill 查询数据。在 Pearl 2.0 中将成为所有 AI Native 能力的统一 CUI 入口。</p>
     </div>
   </div>
 </div>
