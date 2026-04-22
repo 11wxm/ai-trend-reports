@@ -133,17 +133,40 @@
   .hero-meta { display: flex; gap: 16px; font-size: .82em; color: var(--text-muted); flex-wrap: wrap; }
 
   /* Section Tabs */
+  .section-tabs-wrap {
+    margin-bottom: 32px;
+  }
+  .section-tabs-label {
+    font-size: .78em; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 10px; padding-left: 4px;
+  }
   .section-tabs {
-    display: flex; gap: 4px; margin-bottom: 28px; flex-wrap: wrap;
-    background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 5px;
+    display: flex; gap: 6px; flex-wrap: wrap;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 6px;
   }
   .sec-tab {
-    padding: 10px 20px; border-radius: 10px; font-size: .88em; font-weight: 600;
-    color: var(--text-dim); cursor: pointer; transition: all .15s; user-select: none; white-space: nowrap;
+    flex: 1; min-width: 0; text-align: center;
+    padding: 14px 18px; border-radius: 12px; font-size: .92em; font-weight: 700;
+    color: var(--text-dim); cursor: pointer; transition: all .2s ease; user-select: none;
+    white-space: nowrap; border: 1.5px solid transparent; position: relative;
   }
-  .sec-tab:hover { color: var(--text); background: var(--surface2); }
-  .sec-tab.active { color: #fff; background: var(--accent); }
-  .sec-tab.biz-tab.active { background: linear-gradient(135deg, var(--pink), var(--orange)); }
+  .sec-tab:hover { color: var(--text); background: var(--surface2); border-color: var(--border-light); }
+  .sec-tab.active {
+    color: #fff; background: var(--accent); border-color: var(--accent);
+    box-shadow: 0 2px 12px rgba(123,138,255,0.35);
+  }
+  .sec-tab.biz-tab.active {
+    background: linear-gradient(135deg, var(--pink), var(--orange));
+    border-color: var(--pink);
+    box-shadow: 0 2px 12px rgba(249,141,202,0.35);
+  }
+  .sec-tab::after {
+    content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+    width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent;
+    border-top: 6px solid transparent; transition: border-top-color .2s;
+  }
+  .sec-tab.active::after { border-top-color: var(--accent); }
+  .sec-tab.biz-tab.active::after { border-top-color: var(--pink); }
 
   /* Sections */
   .section { display: none; }
@@ -291,8 +314,8 @@
     .report-hero h1 { font-size: 1.55em; }
     .source-btns { gap: 6px; }
     .source-btn { padding: 8px 14px; font-size: .82em; }
-    .section-tabs { gap: 2px; padding: 4px; }
-    .sec-tab { padding: 8px 14px; font-size: .82em; }
+    .section-tabs { gap: 3px; padding: 4px; }
+    .sec-tab { padding: 10px 10px; font-size: .8em; flex: none; }
     .biz-hero-card { padding: 26px 22px; }
     .content-card { padding: 24px 22px; }
   }
@@ -357,12 +380,15 @@
   </div>
 
   <!-- Section Tabs -->
-  <div class="section-tabs">
-    <div class="sec-tab biz-tab active" data-target="sec-biz">🔥 对运营中台的启发</div>
-    <div class="sec-tab" data-target="sec-origin">研究缘起</div>
-    <div class="sec-tab" data-target="sec-compare">横向对比</div>
-    <div class="sec-tab" data-target="sec-usecase">使用场景</div>
-    <div class="sec-tab" data-target="sec-learning">核心启发</div>
+  <div class="section-tabs-wrap">
+    <div class="section-tabs-label">📑 点击切换章节</div>
+    <div class="section-tabs">
+      <div class="sec-tab biz-tab active" data-target="sec-biz">🔥 对运营中台的启发</div>
+      <div class="sec-tab" data-target="sec-origin">研究缘起</div>
+      <div class="sec-tab" data-target="sec-compare">横向对比</div>
+      <div class="sec-tab" data-target="sec-usecase">使用场景</div>
+      <div class="sec-tab" data-target="sec-learning">核心启发</div>
+    </div>
   </div>
 
   <!-- =============== 1. 对运营中台的启发 (REWRITTEN with PRD) =============== -->
