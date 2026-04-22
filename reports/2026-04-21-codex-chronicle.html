@@ -296,6 +296,8 @@
     .biz-hero-card { padding: 26px 22px; }
     .content-card { padding: 24px 22px; }
   }
+  .arch-img { width: 100%; border-radius: 12px; border: 1px solid var(--border); margin: 18px 0; }
+  .arch-img-caption { font-size: .82em; color: var(--text-muted); text-align: center; margin: -10px 0 18px; }
 </style>
 </head>
 <body>
@@ -373,6 +375,8 @@
         <strong>当前方案背景：</strong>Pearl 2.0 正在从传统工具平台升级为 AI Native 平台。<span class="pearl-badge">Pearl</span> 作为运营工作台将采用 CUI + Canvas 双区架构；<span class="tiko-badge">Tiko</span> 作为 AI 助手将成为 Pearl 首页的主入口，通过 <span class="workspace-badge">Workspace</span> 按场景组织能力（Analysis / DeRisk / Campaign）。430 内测版 → 515 对外版 v1 → 619 对外版 V2 分三期交付。
       </div>
     </div>
+    <img class="arch-img" src="../img/mapping.jpg" alt="Chronicle 概念 → Pearl 2.0 架构映射">
+    <p class="arch-img-caption">▲ Chronicle 核心概念与 Pearl 2.0 架构的对应关系</p>
 
     <!-- Card 1: Workspace + Chronicle Context -->
     <div class="click-card bl pink" onclick="this.classList.toggle('open')">
@@ -425,6 +429,8 @@
       <div class="expand-hint">👆 点击展开详细方案</div>
       <div class="detail">
         <p><strong style="color:var(--text)">Pearl PRD 的 Memory 设计：</strong></p>
+        <img class="arch-img" src="../img/memory-layers.jpg" alt="Pearl 2.0 三层 Memory 架构：Session → 个人 → Workspace">
+        <p class="arch-img-caption">▲ Pearl 2.0 三层 Memory 架构与演进路径</p>
         <div class="sol-box">
           <h4>🔄 三层映射关系</h4>
           <ul>
@@ -515,6 +521,8 @@
         </div>
         <div class="accordion-body">
           <p>OpenAI 于 2026-04-20 为 Codex 桌面端推出 <strong style="color:var(--accent)">Chronicle</strong>。表面上看，它是"后台截屏 + 生成记忆"的功能。但深入架构来看，它代表了一种<strong style="color:var(--text)">全新的 Agent 架构模式</strong>：</p>
+          <img class="arch-img" src="../img/chronicle-arch.jpg" alt="Chronicle 架构图：后台 Agent 沙箱截屏 → Vision Pipeline → 本地记忆文件 → 前台 Agent 引用">
+          <p class="arch-img-caption">▲ Chronicle 多 Agent 架构：后台沙箱 Agent 负责感知，前台 Agent 负责交互，通过本地记忆文件解耦</p>
           <div class="hbox hbox-accent"><strong>多 Agent 协作架构：</strong>Chronicle 并不是一个简单的截屏工具。它在后台运行<strong style="color:var(--text)">独立的沙箱 Agent</strong>（sandboxed agents），这些 Agent 有自己的 session 生命周期——"Chronicle starts an ephemeral Codex session with access to this screen context"。这意味着 Codex 实际上在运行一个 multi-agent 系统：前台 Agent 处理用户对话，后台 Agent 负责感知环境并生成记忆。</div>
           <p><strong style="color:var(--text)">记忆文件系统：</strong>生成的记忆存放在 <code style="color:var(--cyan);background:var(--surface3);padding:2px 6px;border-radius:4px;">~/.codex/memories_extensions/chronicle/</code>，格式为未加密 Markdown。而 Chronicle 使用的 consolidation 模型可在配置文件中指定（默认 gpt-5.4-mini），形成了<strong style="color:var(--text)">"感知层用小模型、推理层用大模型"</strong>的分层推理架构。</p>
           <p><strong style="color:var(--text)">临时截图管理：</strong>截图临时存储在 <code style="color:var(--cyan);background:var(--surface3);padding:2px 6px;border-radius:4px;">$TMPDIR/chronicle/screen_recording/</code>，运行期间 6 小时以上的自动清除。截图本身不上传到 OpenAI 服务器永久存储——而是在处理成记忆后丢弃。这是一个<strong style="color:var(--text)">"原始数据短暂、衍生数据持久"</strong>的存储策略。</p>
@@ -549,6 +557,8 @@
           <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="accordion-body">
+          <img class="arch-img" src="../img/comparison.jpg" alt="三款产品架构对比：Chronicle vs Claude Code vs Screenpipe">
+          <p class="arch-img-caption">▲ 三款 Screen-Aware 产品的核心架构差异</p>
           <p><strong style="color:var(--green)">① OpenAI Codex Chronicle</strong> — <strong style="color:var(--text)">架构关键词：Ephemeral Agent + Vision Pipeline + Local Memory FS</strong><br>后台沙箱 Agent 定期截屏，云端处理后生成本地 Markdown 记忆。核心创新在于<strong style="color:var(--text)">将"环境感知"拆分为独立 Agent</strong>，与主交互 Agent 通过记忆文件系统解耦。</p>
           <p><strong style="color:var(--orange)">② Anthropic Claude Code + Routines</strong> — <strong style="color:var(--text)">架构关键词：Workflow DAG + Computer Use + Rules Engine</strong><br>Routines 将 prompt + repo + connectors 封装为可复用流程，本质上是<strong style="color:var(--text)">声明式工作流引擎</strong>。Computer Use 提供直接操控桌面的能力，但更侧重"执行"而非"感知"。CLAUDE.md 作为项目级规则文件对标 AGENTS.md。</p>
           <p><strong style="color:var(--cyan)">③ Screenpipe（MIT 开源）</strong> — <strong style="color:var(--text)">架构关键词：Continuous Recording + Local-first + MCP Server</strong><br>24/7 全量录屏 + 音频 Whisper 转写 → 全本地 SQLite 存储 → 暴露为 MCP Server 供任意 AI 工具查询。<strong style="color:var(--text)">最纯粹的"记录层"</strong>——不做推理，只做感知和存储。架构上最解耦，但也意味着需要其他 Agent 来消费数据。</p>
