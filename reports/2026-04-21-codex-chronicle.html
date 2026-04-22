@@ -321,8 +321,7 @@
   }
   .arch-img { width: 100%; border-radius: 12px; border: 1px solid var(--border); margin: 18px 0; }
   .arch-img-caption { font-size: .82em; color: var(--text-muted); text-align: center; margin: -10px 0 18px; }
-</style>
-</head>
+</style></head>
 <body>
 
 <!-- Top Bar -->
@@ -353,7 +352,7 @@
     <span class="hero-badge">Agent · 深度拆解</span>
     <h1>编程助手开始自己看屏幕了</h1>
     <div class="value-liner">
-      OpenAI Codex 新推出 Chronicle — 让 AI 编程助手从「用户喂上下文」进化到「<span class="hl">Agent 自己看屏幕</span>」。本报告横向对比 3 款产品，深度拆解其架构设计，分析对 Pearl 2.0 AI Native 框架升级的具体启发。
+      OpenAI Codex 新推出 Chronicle — 让 AI 编程助手从「用户喂上下文」进化到「<span class="hl">Agent 自己看屏幕</span>」。本报告横向对比 3 款产品，拆解其架构设计背后的取舍，分析哪些思路对 Pearl 2.0 有参考价值，以及<span class="hl">为什么 Pearl 不应该照搬 Chronicle</span>。
     </div>
     <div class="source-btns">
       <a href="https://9to5mac.com/2026/04/20/codex-for-mac-gains-chronicle-for-enhancing-context-using-recent-screen-content/" target="_blank" class="source-btn">
@@ -391,150 +390,149 @@
     </div>
   </div>
 
-  <!-- =============== 1. 对运营中台的启发 (REWRITTEN with PRD) =============== -->
+  <!-- =============== 1. 对运营中台的启发 (REVISED per review) =============== -->
   <div class="section active" id="sec-biz">
 
     <div class="biz-hero-card">
       <h2>🔥 对 Pearl 2.0 框架升级的启发</h2>
-      <p class="lead">我们正在把 Tiko 从飞书机器人迁移到 Pearl 首页，构建 AI Native 的 CUI 体验框架。Chronicle 的"屏幕感知 → 本地记忆 → Agent 自主引用"架构，恰好给 Pearl 2.0 的三个核心命题——Workspace、Session/Memory、AI Accessible——提供了可直接对标落地的参考。</p>
+      <p class="lead">Chronicle 验证了一件事：<strong style="color:var(--text)">Agent 需要自动获取用户当前工作上下文</strong>，否则每轮对话都要用户手工补充背景。这个需求在运营中台同样成立。但值得注意的是，Pearl 的最优实现路径和 Chronicle 不同——不是复制视觉感知链路，而是利用 Pearl 自身的结构化数据优势。</p>
       <div class="biz-context">
         <strong>当前方案背景：</strong>Pearl 2.0 正在从传统工具平台升级为 AI Native 平台。<span class="pearl-badge">Pearl</span> 作为运营工作台将采用 CUI + Canvas 双区架构；<span class="tiko-badge">Tiko</span> 作为 AI 助手将成为 Pearl 首页的主入口，通过 <span class="workspace-badge">Workspace</span> 按场景组织能力（Analysis / DeRisk / Campaign）。430 内测版 → 515 对外版 v1 → 619 对外版 V2 分三期交付。
       </div>
+      <img class="arch-img" src="../img/mapping.jpg" alt="Chronicle 概念 → Pearl 2.0 架构映射">
+      <p class="arch-img-caption">▲ Chronicle 核心概念与 Pearl 2.0 架构的对应关系——注意 Pearl 应选择不同于 Chronicle 的实现路径</p>
     </div>
-    <img class="arch-img" src="../img/mapping.jpg" alt="Chronicle 概念 → Pearl 2.0 架构映射">
-    <p class="arch-img-caption">▲ Chronicle 核心概念与 Pearl 2.0 架构的对应关系</p>
 
-    <!-- Card 1: Workspace + Chronicle Context -->
-    <div class="click-card bl pink" onclick="this.classList.toggle('open')">
-      <h3>🧩 Workspace 的上下文隔离 — 从 Chronicle 的记忆文件系统学什么</h3>
-      <div class="brief">Chronicle 用本地 Markdown 文件分类管理记忆。Pearl 的 Workspace（Analysis / DeRisk / Campaign）同样需要场景隔离的记忆策略，避免「降险对话里出现分析上下文」的串台问题。</div>
-      <div class="expand-hint">👆 点击展开详细方案</div>
+    <!-- Card 1: AI Accessible > 屏幕感知 -->
+    <div class="click-card bl cyan" onclick="this.classList.toggle('open')">
+      <h3>🖥️ 启发一：Pearl 更适合走 AI Accessible，而不是复制 Chronicle 的视觉感知</h3>
+      <div class="brief">Chronicle 说明 Agent 需要自动获取工作上下文。但在运营中台，页面本身可以被结构化读取——这比截屏 OCR 更准确、更安全、更便宜。</div>
+      <div class="expand-hint">👆 点击展开详细分析</div>
       <div class="detail">
-        <div class="hbox hbox-pink"><strong>对标关系：</strong>Chronicle 将记忆存在 <code style="color:var(--cyan);background:var(--surface3);padding:2px 6px;border-radius:4px;">~/.codex/memories_extensions/chronicle/</code> 下的 Markdown 文件中，不同主题的记忆自然归类。Pearl 的 Workspace 就是"按运营场景分文件夹"——每个 Workspace 有自己的 Skill 召回范围、上下文积累和历史 Output。</div>
+        <div class="hbox hbox-cyan"><strong>Chronicle 暴露的问题：</strong>用户在多窗口间切换时，AI 助手无法感知用户正在看什么。Chronicle 用"后台截屏 → OCR → 文本摘要"来解决。但这条 Vision Pipeline 有明显代价：信息损耗大、持续消耗 Rate Limit、存在 prompt injection 风险（屏幕上的恶意内容可能被注入记忆）。</div>
 
-        <p><strong style="color:var(--text)">PRD 现状：</strong>当前 Pearl 2.0 已定义 3 个 Workspace（Analysis、DeRisk、Campaign），但 PRD 中 Memory 部分只规划了 Session 级和个人级，Workspace 级 Memory 标注为"2期再考虑做"。</p>
+        <p><strong style="color:var(--text)">在运营中台，这个问题同样存在：</strong>AM 在 Pearl 上操作 Seller Mgmt 看商家数据时，切到 Tiko 提问还得手动复制商家 ID 和罚单信息。但 Pearl 的优势在于——<strong style="color:var(--cyan)">页面本身就在 Pearl 域下</strong>，不需要截屏。</p>
 
-        <p><strong style="color:var(--text)">Chronicle 给的启发：</strong>不用等 Workspace Memory 的完整方案。先用一个轻量策略——<strong style="color:var(--pink)">每个 Workspace 维护一个 Context Summary 文件</strong>，类似 Chronicle 的记忆 Markdown。每次 Session 结束时，用小模型（类似 Chronicle 使用 gpt-5.4-mini 做 consolidation）将关键决策和数据摘要追加到该文件。下次进入该 Workspace 时自动加载。</p>
+        <p><strong style="color:var(--text)">因此 Pearl 应该优先建设 AI Accessible，而不是模仿 Chronicle：</strong>PRD 已规划 Canvas 的"工具调起"组件——Agent 可直接读取 Pearl 页面的结构化数据（类似 CLI 接口）。这比 Chronicle 的截屏方案精度更高、成本更低、安全性更好。</p>
 
         <div class="sol-box">
-          <h4>💡 具体落地建议</h4>
+          <h4>💡 建议落地方式</h4>
           <ul>
-            <li><strong>430 内测版可做：</strong>每个 Workspace 增加一个 <code style="color:var(--cyan);background:var(--surface3);padding:2px 6px;border-radius:4px;">workspace_context.md</code> 字段，Session 结束时用 Tiko 的小模型提炼 3-5 条关键信息写入。成本增量约 200-500 tokens/session。</li>
-            <li><strong>515 版演进：</strong>Context Summary 支持用户手动编辑（和 Chronicle 一样"unencrypted markdown that you can read and modify"），让 AM 可以主动标注"这个商家的降险策略我决定用 XX 方案"。</li>
+            <li><strong>515 版优先：</strong>完成 Thunder Shop / Seller Mgmt / Shop Performance 三个 P0 页面的 AI Accessible 改造。每个页面输出标准化 JSON 供 Tiko 调用。</li>
+            <li><strong>场景串联：</strong>AM 在 Canvas 打开 Seller Mgmt → Tiko 自动读取页面中的商家信息 → AM 在 CUI 问"这个商家 SPS 为什么掉了"，Tiko 已知具体商家和数据。</li>
+            <li><strong>注意边界：</strong>AI Accessible 读取的页面如果包含商家自由输入的文本，仍需做内容过滤——Chronicle 的 prompt injection 教训在此同样适用。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Workspace 上下文隔离 -->
+    <div class="click-card bl pink" onclick="this.classList.toggle('open')">
+      <h3>🧩 启发二：Workspace 需要场景隔离的上下文积累机制</h3>
+      <div class="brief">Chronicle 用本地 Markdown 文件分类管理记忆。Pearl 的 Workspace 面临类似问题：不同运营场景有不同上下文边界，不应把 Analysis / DeRisk / Campaign 的信息混在一起。</div>
+      <div class="expand-hint">👆 点击展开详细分析</div>
+      <div class="detail">
+        <div class="hbox hbox-pink"><strong>Chronicle 暴露的问题：</strong>当一个 Agent 处理多种任务时，不同任务的上下文会互相干扰。Chronicle 通过将记忆存在不同的 Markdown 文件中来做隐式隔离。这个思路可以映射到 Pearl 的 Workspace——每个 Workspace 本质上就是"按运营场景分文件夹"。</div>
+
+        <p><strong style="color:var(--text)">在运营中台，这个问题同样成立：</strong>AM 的降险问题和经营分析是完全不同的工作场景。如果 Tiko 把降险对话中积累的上下文带到分析场景，会造成干扰。当前 PRD 中 Workspace 级 Memory 标注为"2期再考虑做"。</p>
+
+        <p><strong style="color:var(--text)">Pearl 可以先用轻量方案验证：</strong>不需要等完整的 Workspace Memory 方案。先在每个 Workspace 维护一个 Context Summary——类似 Chronicle 的记忆 Markdown——Session 结束时用小模型提炼关键信息写入。成本增量约 200-500 tokens/session。</p>
+
+        <div class="sol-box">
+          <h4>💡 渐进落地</h4>
+          <ul>
+            <li><strong>430 内测版可做：</strong>每个 Workspace 增加 Context Summary 字段，Session 结束时自动提炼 3-5 条关键信息。</li>
+            <li><strong>515 版演进：</strong>Context Summary 支持 AM 手动编辑（和 Chronicle 一样"unencrypted markdown that you can read and modify"），让 AM 可以主动标注决策信息。</li>
             <li><strong>验证指标：</strong>同一 Workspace 下的追问轮次减少率、AM 手动重复描述背景的频次。</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- Card 2: CUI + Canvas ← Screen-Aware -->
-    <div class="click-card bl cyan" onclick="this.classList.toggle('open')">
-      <h3>🖥️ CUI + Canvas 画布 — 让 Tiko "看到"运营正在操作的 Pearl 页面</h3>
-      <div class="brief">Chronicle 让 Codex "看到"屏幕上的代码和文档。Pearl 2.0 的 Canvas 组件（工具调起 + 页面渲染）天然具备"Agent 可读取页面内容"的能力——这就是我们自己的"屏幕感知"。</div>
-      <div class="expand-hint">👆 点击展开详细方案</div>
-      <div class="detail">
-        <p><strong style="color:var(--text)">PRD 中的关键设计：</strong>Pearl 2.0 已规划 Canvas 的"工具调起"组件——在 CUI 右侧调起 Pearl 域下页面，<strong style="color:var(--cyan)">Agent 可读取对应页面数据</strong>（AI Accessible 改造后，Seller Mgmt 等页面已支持）。这本质上就是 Chronicle "截屏→理解" 的结构化版本，而且比截屏更精确。</p>
-
-        <div class="hbox hbox-cyan"><strong>关键差异：</strong>Chronicle 是视觉截图 → OCR → 文本摘要，信息损耗大。Pearl 的 AI Accessible 方案是<strong style="color:var(--text)">直接获取页面结构化数据</strong>（类似 CLI 接口），精度远高于截屏。这是我们的优势——应该<strong style="color:var(--cyan)">优先推 AI Accessible 改造</strong>而不是做截屏。</div>
-
-        <div class="sol-box">
-          <h4>💡 DeRisk 场景落地（515 版重点）</h4>
-          <ul>
-            <li><strong>场景串联：</strong>AM 在 Canvas 打开 Seller Mgmt 查看商家罚单 → Tiko 自动读取页面中的罚单 ID、违规类型、处罚状态 → AM 在 CUI 问"这个罚单怎么解除"，<strong style="color:var(--text)">Tiko 已经知道具体是哪个罚单</strong>，不需要 AM 复制粘贴。</li>
-            <li><strong>对标 Chronicle：</strong>Chronicle 让用户说"修复刚才那个 Stripe webhook 超时"时 Codex 知道具体错误码。Pearl 让 AM 说"这个商家的 SPS 为什么掉了"时 Tiko 知道 AM 正在看哪个商家的哪个页面。</li>
-            <li><strong>推进建议：</strong>515 版优先完成 Thunder Shop / Seller Mgmt / Shop Performance 三个 P0 页面的 AI Accessible 改造。每个页面输出标准化 JSON 供 Tiko 调用。</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 3: Session + Memory ← Chronicle Memory Layers -->
+    <!-- Card 3: 三层 Memory -->
     <div class="click-card bl purple" onclick="this.classList.toggle('open')">
-      <h3>🧠 三层 Memory 映射 — Chronicle 的记忆分层如何指导 Tiko</h3>
-      <div class="brief">Chronicle 的 Session Memory → Codex Memory → 项目级 AGENTS.md 三层结构，和 Pearl 2.0 规划的 Session → 个人级 → Workspace 级高度吻合。但 Chronicle 的教训也要学。</div>
-      <div class="expand-hint">👆 点击展开详细方案</div>
+      <h3>🧠 启发三：Memory 分层有价值，但要防止自动固化不稳定经验</h3>
+      <div class="brief">Chronicle 的记忆分层（Session → Codex Memory → 项目级）和 Pearl PRD 的三层设计高度吻合。但 Memory 的价值在于减少重复补充上下文，不在于替代知识库或规则体系。</div>
+      <div class="expand-hint">👆 点击展开详细分析</div>
       <div class="detail">
         <p><strong style="color:var(--text)">Pearl PRD 的 Memory 设计：</strong></p>
-        <img class="arch-img" src="../img/memory-layers.jpg" alt="Pearl 2.0 三层 Memory 架构：Session → 个人 → Workspace">
+        <img class="arch-img" src="../img/memory-layers.jpg" alt="Pearl 2.0 三层 Memory 架构">
         <p class="arch-img-caption">▲ Pearl 2.0 三层 Memory 架构与演进路径</p>
         <div class="sol-box">
           <h4>🔄 三层映射关系</h4>
           <ul>
-            <li><strong>Session 级（短时记忆）：</strong>等同 Chronicle 的当前会话上下文。Pearl 已规划"per-query 创建 Session"，Session 内消息保留。✅ 已明确</li>
-            <li><strong>个人级（全局记忆）：</strong>等同 Chronicle 的 Codex Memories（存储用户偏好和工作模式）。Pearl 规划了"个人 Memory"全局生效。<strong style="color:var(--purple)">建议参考 Chronicle：生成记忆时用小模型自动 consolidation，不增加 AM 操作负担</strong></li>
-            <li><strong>Workspace 级（场景记忆）：</strong>等同 Chronicle 所没有的——但 Claude Code 用 AGENTS.md 部分实现了。这是 Pearl 的<strong style="color:var(--text)">差异化优势</strong>。DeRisk Workspace 可积累"这类商家罚单通常是 XX 原因"的经验。</li>
+            <li><strong>Session 级（短时记忆）：</strong>等同 Chronicle 的当前会话上下文。Pearl 已规划"per-query 创建 Session"，方案明确。</li>
+            <li><strong>个人级（全局记忆）：</strong>等同 Chronicle 的 Codex Memories（存储用户偏好和工作模式）。建议参考 Chronicle 的做法——用小模型自动 consolidation，不增加 AM 操作负担。</li>
+            <li><strong>Workspace 级（场景记忆）：</strong>这是 Pearl 相对 Chronicle 的差异化设计。DeRisk Workspace 可积累降险经验，Analysis 可积累分析偏好。</li>
           </ul>
         </div>
 
-        <div class="hbox hbox-purple"><strong>Chronicle 的教训：</strong>记忆文件未加密、任何程序可访问，且截图临时文件可能包含敏感信息。Pearl 处理的是商家经营数据和平台风控信息，<strong style="color:var(--text)">必须在 Memory 存储层做权限隔离</strong>——不同角色的 AM 不能交叉访问彼此的 Workspace Memory。</div>
+        <div class="hbox hbox-purple"><strong>⚠️ 重要约束——Memory ≠ 知识库：</strong>Chronicle 的记忆文件未加密、可被任意程序访问，且历史会话自动沉淀可能导致过时经验被固化。Pearl 的 Workspace Memory <strong style="color:var(--text)">更适合沉淀"决策线索、关注项、已验证打法"</strong>，不宜直接把历史对话自动固化为规则知识。否则可能出现经验过时、个案误泛化、非标流程被记成标准答案等问题。</div>
 
         <div class="sol-box">
-          <h4>💡 落地建议</h4>
+          <h4>💡 落地节奏</h4>
           <ul>
-            <li><strong>430 版：</strong>Session Memory 可直接上线（已有方案）。个人级 Memory 做最简版——记录 AM 的常查商家、常用看板、偏好语言。</li>
-            <li><strong>515 版：</strong>个人级 Memory 增加自动 consolidation（每日/每周一次），让 Tiko 学习 AM 的工作模式而非被动存储所有对话。</li>
-            <li><strong>619 版：</strong>Workspace Memory 上线，支持 DeRisk 场景积累"罚单类型→解决方案"的映射表，Analysis 场景积累"商家→关注指标"的偏好。</li>
+            <li><strong>430 版：</strong>Session Memory 上线（已有方案）。个人级做最简版——记录常查商家、常用看板、偏好语言。</li>
+            <li><strong>515 版：</strong>个人级增加自动 consolidation（每日/每周一次），让 Tiko 学习工作模式而非被动存储。</li>
+            <li><strong>619 版：</strong>Workspace Memory 上线，初期仅存储决策线索和经验摘要，不自动生成规则映射。</li>
           </ul>
         </div>
+
+        <p><strong style="color:var(--text)">安全约束：</strong>Pearl 处理的是商家经营数据和平台风控信息，必须在 Memory 存储层做权限隔离——不同角色的 AM 不能交叉访问彼此的 Workspace Memory。这一点 Chronicle（本地未加密 Markdown）做得不好，Pearl 必须做得更严格。</p>
       </div>
     </div>
 
-    <!-- Card 4: Copilot + AI Accessible ← Routines -->
-    <div class="click-card bl orange" onclick="this.classList.toggle('open')">
-      <h3>⚡ Copilot 模式 + 运营 Routine — 从 Claude Code Routines 学流程封装</h3>
-      <div class="brief">Claude Code Routines 把高频开发流程封装为可复用工作流。Pearl 2.0 的 Copilot 模式（AI-enabled 工具的 AI 副驾）和 Scheduled Task 能力，组合起来就是"运营 Routine"。</div>
-      <div class="expand-hint">👆 点击展开详细方案</div>
-      <div class="detail">
-        <p><strong style="color:var(--text)">PRD 中的 Copilot 定义：</strong>面向 AI-enabled 工具，AI 通过 Copilot 形式做"副驾"辅助操作。ShowCase：平台营销-货补方向正在开发 AI Enabled 货补工具。619 版还规划了 Scheduled Task 支持。</p>
-
-        <div class="hbox hbox-orange"><strong>Routines 映射到运营：</strong>Claude Code Routines 封装的是"代码审查→测试→提 PR"这类开发流程。翻译到 AM 场景就是——"每周一 8:00 自动巡检管辖商家 SPS 变化 → 标红异常店铺 → 生成飞书文档 → 推送到 AM 工作群"。</div>
-
-        <div class="sol-box">
-          <h4>💡 运营 Routine 落地路径</h4>
-          <ul>
-            <li><strong>Phase 1（619 版 Scheduled Task）：</strong>先做"定时触发"——AM 设置"每天 10 点检查我的商家有没有新罚单"，Tiko 自动执行 DeRisk 查询并推送结果。</li>
-            <li><strong>Phase 2（H2）：</strong>引入 Routine 模板——Tiko 观察 AM 的高频操作序列（例如每周一巡店→查数据→写周报），主动建议"检测到你每周一都做这套巡检，要自动化吗？"</li>
-            <li><strong>Phase 3：</strong>Routine 市场化——高绩效 AM 的 Routine 可分享，新人 AM 可一键安装。对标 Codex 的 Skills/Plugin 生态。</li>
-          </ul>
-        </div>
-
-        <p><strong style="color:var(--text)">和 Copilot 的结合：</strong>对于货补等 AI-enabled 工具，Copilot 在用户操作过程中积累模式，然后生成 Routine 建议。这形成了<strong style="color:var(--orange)">"人工操作→Copilot 观察→Routine 提炼→自动化执行"</strong>的渐进式 AI 渗透路径，和 PRD 中 Non-AI → AI-enabled → AI-Native 的演进完全一致。</p>
-      </div>
-    </div>
-
-    <!-- Card 5: Rate Limit Economics & Cost Control -->
+    <!-- Card 4: 成本分级 -->
     <div class="click-card bl green" onclick="this.classList.toggle('open')">
-      <h3>💰 Chronicle 的成本教训 — Tiko 的感知策略必须精算</h3>
-      <div class="brief">Chronicle 最大的用户抱怨是"rate limit 消耗太快"。Tiko 服务数十万商家，不可能全量感知。从 Chronicle 的失败中学到的成本策略。</div>
-      <div class="expand-hint">👆 点击展开详细方案</div>
+      <h3>💰 启发四：上下文采集必须分级，Chronicle 的成本教训值得警惕</h3>
+      <div class="brief">Chronicle 最大的用户抱怨是"后台 Agent 持续消耗额度"。Tiko 如果对每个操作都做上下文感知，推理成本会爆炸。</div>
+      <div class="expand-hint">👆 点击展开详细分析</div>
       <div class="detail">
-        <div class="hbox hbox-green"><strong>Chronicle 的真实情况：</strong>后台 Agent 定期截屏并调用模型做 consolidation，即使用户没有主动提问也在持续消耗 Rate Limit。社区大量投诉"开了 Chronicle 之后额度一天就用完"。$200/月 的 Pro 订阅，实际可用于编程的额度被大幅压缩。</div>
+        <div class="hbox hbox-green"><strong>Chronicle 的真实情况：</strong>后台 Agent 定期截屏并调用模型做 consolidation，即使用户没有主动提问也在持续消耗 Rate Limit。社区大量投诉"开了 Chronicle 之后额度一天就用完"。这说明"全量持续感知"在当前模型成本下还不现实。</div>
 
-        <p>Tiko 的场景更敏感——如果对每个商家的每次操作都做"上下文感知"，推理成本会爆炸。必须<strong style="color:var(--green)">事件驱动 + 分级感知</strong>：</p>
+        <p><strong style="color:var(--text)">Pearl 的场景更敏感：</strong>服务数万 AM、十万级商家，不可能对每个操作都做持续感知。建议采用事件驱动 + 分级策略：</p>
 
         <div class="sol-box">
           <h4>🔧 三级感知策略</h4>
           <ul>
-            <li><strong style="color:var(--text)">Level 1 — 被动：</strong>AM 发起 CUI 提问时，Tiko 从当前 Canvas 页面自动获取上下文（AI Accessible 方案，几乎 0 额外成本）。</li>
-            <li><strong style="color:var(--text)">Level 2 — 事件触发：</strong>商家操作触发关键事件（设置变更失败、订单异常、罚单新增）时，自动生成操作摘要注入下次会话。成本约 500 tokens/事件。</li>
-            <li><strong style="color:var(--text)">Level 3 — 主动：</strong>仅对 VIP 商家或高频求助商家开启"操作轨迹持续追踪"，类似 Chronicle 的 always-on 模式。按需开启，数据驱动。</li>
+            <li><strong style="color:var(--text)">Level 1 — 被动（几乎 0 额外成本）：</strong>AM 发起 CUI 提问时，Tiko 从当前 Canvas 页面自动获取上下文（AI Accessible 方案）。</li>
+            <li><strong style="color:var(--text)">Level 2 — 事件触发（约 500 tokens/事件）：</strong>商家操作触发关键事件（罚单新增、指标异动）时，自动生成摘要注入下次会话。</li>
+            <li><strong style="color:var(--text)">Level 3 — 主动（按需开启）：</strong>仅对 VIP 商家或高频场景开启持续追踪。数据驱动决定范围。</li>
           </ul>
         </div>
 
-        <p><strong style="color:var(--text)">关键数字参考：</strong>Chronicle consolidation 用 gpt-5.4-mini（成本低）。Tiko 的 Workspace Context Summary 也应该用小模型做压缩——<strong style="color:var(--green)">大模型负责理解和回答，小模型负责记忆压缩和归档</strong>。</p>
+        <p><strong style="color:var(--text)">关键原则：</strong>参考 Chronicle 的分层——<strong style="color:var(--green)">大模型负责理解和回答，小模型负责记忆压缩和归档</strong>。Tiko 的 Context Summary 和事件摘要都应该用小模型处理，只有在 AM 直接对话时才调用完整推理链。</p>
+      </div>
+    </div>
+
+    <!-- Card 5: Routine（降级为远期探索） -->
+    <div class="click-card bl orange" onclick="this.classList.toggle('open')">
+      <h3>⚡ 远期探索：运营 Routine 的可能性与约束</h3>
+      <div class="brief">Claude Code Routines 把高频开发流程封装为可复用工作流。运营场景也有类似的重复操作模式，但落地需要先验证操作模式的稳定性。</div>
+      <div class="expand-hint">👆 点击展开详细分析</div>
+      <div class="detail">
+        <p><strong style="color:var(--text)">Claude Code Routines 的思路：</strong>将 prompt + repo + connectors 封装为可复用流程。翻译到 AM 场景——"每周一 8:00 巡检商家 SPS → 标红异常 → 生成周报 → 推送"。Pearl PRD 在 619 版规划了 Scheduled Task 能力，这为 Routine 提供了基础。</p>
+
+        <div class="hbox hbox-orange"><strong>⚠️ 需要谨慎的地方：</strong>运营操作的重复性<strong style="color:var(--text)">未必像开发流程那样高</strong>。不同商家的情况差异大，AM 的判断依赖经验和上下文。"自动观察用户操作 → 提炼 Routine"听起来诱人，但自动抽象流程模板的误判成本可能很高。</div>
+
+        <div class="sol-box">
+          <h4>💡 建议的渐进路径</h4>
+          <ul>
+            <li><strong>619 版（确定可做）：</strong>先做"定时触发"——AM 手动设置"每天 10 点检查商家罚单"，Tiko 执行查询并推送结果。这是最简单、最可控的 Routine。</li>
+            <li><strong>H2（可探索）：</strong>从高频、低分歧的固定操作开始尝试 Routine 模板。比如"巡店数据拉取"这类流程标准化程度高，适合先试。</li>
+            <li><strong>更远期（需验证后再推进）：</strong>Routine 模板共享、Copilot 主动建议自动化等。这些方向有价值，但需要先验证单个 Routine 的稳定性和 AM 接受度。</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="tldr-bar">
-      <h3>📌 按 Pearl 2.0 节奏的行动建议</h3>
-      <p><strong style="color:var(--text)">430 内测版（下周）：</strong>Workspace Context Summary 最简版上线，每个 Workspace 自动积累关键决策摘要。CUI 基础体验中集成"当前 Canvas 页面上下文自动注入"能力。</p>
-      <p style="margin-top:10px;"><strong style="color:var(--text)">515 对外版 v1：</strong>DeRisk 场景完整落地——5 类查询 + Canvas 调起 Seller Mgmt/Thunder 页面 + Tiko 自动读取页面数据。个人级 Memory 上线自动 consolidation。三个 P0 页面完成 AI Accessible 改造。</p>
-      <p style="margin-top:10px;"><strong style="color:var(--text)">619 对外版 V2：</strong>Scheduled Task 上线 → 运营 Routine 第一版。Workspace Memory 正式启用。事件触发式感知覆盖 DeRisk 高频场景。</p>
-      <p style="margin-top:10px;"><strong style="color:var(--text)">H2 远期：</strong>Routine 模板市场 + 跨 AM 的 Workspace 知识共享 + Copilot 主动建议自动化。</p>
+      <h3>📌 一句话总结</h3>
+      <p>Chronicle 验证了"Agent 自动获取上下文"的重要性，但 Pearl 不应复制它的视觉感知路线。Pearl 的优势在于<strong style="color:var(--text)">页面可被结构化读取（AI Accessible）</strong>，这比截屏更准确、更安全、更便宜。在此基础上，Workspace 隔离、Memory 分层、成本分级感知这几个方向值得推进，但要注意：<strong style="color:var(--text)">Memory 不等于知识库，Routine 不等于全自动化</strong>——先把基础链路跑通，再谈生态扩展。</p>
     </div>
   </div>
 
-  <!-- =============== 2. 研究缘起 (DEEPENED) =============== -->
+  <!-- =============== 2. 研究缘起 (REVISED) =============== -->
   <div class="section" id="sec-origin">
     <div class="content-card">
       <h2>🔍 研究缘起</h2>
@@ -542,52 +540,43 @@
 
       <div class="accordion">
         <div class="accordion-header" onclick="toggleAccordion(this)">
-          <h3>Chronicle 是什么？表面 vs 架构本质</h3>
+          <h3>Chronicle 是什么：从"截屏功能"到"上下文感知架构"</h3>
           <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="accordion-body">
-          <p>OpenAI 于 2026-04-20 为 Codex 桌面端推出 <strong style="color:var(--accent)">Chronicle</strong>。表面上看，它是"后台截屏 + 生成记忆"的功能。但深入架构来看，它代表了一种<strong style="color:var(--text)">全新的 Agent 架构模式</strong>：</p>
-          <img class="arch-img" src="../img/chronicle-arch.jpg" alt="Chronicle 架构图：后台 Agent 沙箱截屏 → Vision Pipeline → 本地记忆文件 → 前台 Agent 引用">
-          <p class="arch-img-caption">▲ Chronicle 多 Agent 架构：后台沙箱 Agent 负责感知，前台 Agent 负责交互，通过本地记忆文件解耦</p>
-          <div class="hbox hbox-accent"><strong>多 Agent 协作架构：</strong>Chronicle 并不是一个简单的截屏工具。它在后台运行<strong style="color:var(--text)">独立的沙箱 Agent</strong>（sandboxed agents），这些 Agent 有自己的 session 生命周期——"Chronicle starts an ephemeral Codex session with access to this screen context"。这意味着 Codex 实际上在运行一个 multi-agent 系统：前台 Agent 处理用户对话，后台 Agent 负责感知环境并生成记忆。</div>
-          <p><strong style="color:var(--text)">记忆文件系统：</strong>生成的记忆存放在 <code style="color:var(--cyan);background:var(--surface3);padding:2px 6px;border-radius:4px;">~/.codex/memories_extensions/chronicle/</code>，格式为未加密 Markdown。而 Chronicle 使用的 consolidation 模型可在配置文件中指定（默认 gpt-5.4-mini），形成了<strong style="color:var(--text)">"感知层用小模型、推理层用大模型"</strong>的分层推理架构。</p>
-          <p><strong style="color:var(--text)">临时截图管理：</strong>截图临时存储在 <code style="color:var(--cyan);background:var(--surface3);padding:2px 6px;border-radius:4px;">$TMPDIR/chronicle/screen_recording/</code>，运行期间 6 小时以上的自动清除。截图本身不上传到 OpenAI 服务器永久存储——而是在处理成记忆后丢弃。这是一个<strong style="color:var(--text)">"原始数据短暂、衍生数据持久"</strong>的存储策略。</p>
+          <p>OpenAI 于 2026-04-20 为 Codex 桌面端推出 <strong style="color:var(--accent)">Chronicle</strong>。表面上看，它是"后台截屏 + 生成记忆"的功能。但它呈现出一种值得关注的架构趋势——<strong style="color:var(--text)">将环境感知从用户操作中分离出来，交给独立的后台 Agent</strong>：</p>
+          <img class="arch-img" src="../img/chronicle-arch.jpg" alt="Chronicle 架构图">
+          <p class="arch-img-caption">▲ Chronicle 架构：后台沙箱 Agent 负责感知，前台 Agent 负责交互，通过本地记忆文件解耦</p>
+          <div class="hbox hbox-accent"><strong>多 Agent 协作：</strong>Chronicle 在后台运行独立的沙箱 Agent（ephemeral session），有自己的生命周期和 Rate Limit 消耗。前台 Agent 处理用户对话，后台 Agent 负责感知环境并生成记忆。至少在消费级产品里，这种前后台 Agent 分离的形态已经开始变得明确。</div>
+          <p><strong style="color:var(--text)">记忆文件系统：</strong>生成的记忆存放在 <code style="color:var(--cyan);background:var(--surface3);padding:2px 6px;border-radius:4px;">~/.codex/memories_extensions/chronicle/</code>，格式为未加密 Markdown。Consolidation 模型可在配置文件中指定（默认 gpt-5.4-mini），体现了<strong style="color:var(--text)">"感知层用小模型、推理层用大模型"</strong>的分层推理思路。</p>
+          <p><strong style="color:var(--text)">临时截图管理：</strong>截图临时存储在 <code style="color:var(--cyan);background:var(--surface3);padding:2px 6px;border-radius:4px;">$TMPDIR/chronicle/screen_recording/</code>，6 小时以上自动清除。处理成记忆后原始截图丢弃——"原始数据短暂、衍生数据持久"的存储策略。</p>
         </div>
       </div>
 
       <div class="accordion">
         <div class="accordion-header" onclick="toggleAccordion(this)">
-          <h3>为什么这件事值得深度关注？三层架构变革</h3>
+          <h3>Chronicle 不是什么：它的边界和限制</h3>
           <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="accordion-body">
-          <div class="hbox hbox-accent"><strong>表层：</strong>编程助手从"仅依赖聊天记录"进化到"理解整个桌面工作环境"。上下文获取的主动权从用户转移到 Agent。</div>
-
-          <p><strong style="color:var(--text)">架构层（真正值得关注的）：</strong></p>
-          <div class="sol-box">
-            <h4>🔍 三个架构范式转变</h4>
-            <ul>
-              <li><strong>Agent Sandbox 化：</strong>Chronicle 的后台 Agent 运行在独立沙箱中，有自己的 session 和 rate limit 消耗。这预示着未来 AI 产品的架构走向——<strong style="color:var(--accent)">前台交互 Agent + 多个后台感知/执行 Agent 的协作模式</strong>。</li>
-              <li><strong>Vision-to-Text Pipeline 成为基础设施：</strong>截屏→OCR/视觉理解→结构化文本→记忆 Markdown。这条 Pipeline 正在标准化，意味着任何"用户看到的内容"都可以变成 Agent 的上下文。</li>
-              <li><strong>记忆从"对话副产品"变成"一等公民"：</strong>Chronicle 的记忆文件是独立管理的资产（可读、可编辑、可搜索、可删除），而不是藏在对话历史里的隐含信息。这改变了 AI 产品的数据模型。</li>
-            </ul>
-          </div>
-
-          <p><strong style="color:var(--text)">生态层：</strong>Chronicle 和 Codex 的 90+ Plugins、Skills、MCP Servers 共同构成了一个<strong style="color:var(--text)">"感知+记忆+工具"三位一体</strong>的 Agent 架构。单独看任何一个功能都不惊艳，组合在一起就是完整的 Agent 操作系统。</p>
+          <p>理解 Chronicle 的边界同样重要，这直接影响我们从中学什么、不学什么：</p>
+          <div class="hbox hbox-orange"><strong>"看见"不等于"理解"：</strong>Chronicle 拿到了更多上下文，但不代表 Agent 因此就更懂用户的任务目标。屏幕截图能提供视觉线索，但无法感知用户的意图、优先级和决策逻辑。上下文获取只是解决了信息输入问题，并不自动带来更好的任务规划和执行能力。</div>
+          <div class="hbox hbox-pink"><strong>更适合低结构化环境，不一定适合企业中台：</strong>Chronicle 的价值在于用户工作环境碎片化（VSCode + Chrome + Slack 多窗口跳转），Agent 无法通过 API 获取所有上下文。但在运营中台里，很多页面本来就能通过结构化方式暴露数据。<strong style="color:var(--text)">所以 Chronicle 的视觉感知路线不是 Pearl 应该跟进的方向，但它验证了"自动上下文获取"这件事的重要性</strong>。</div>
+          <div class="hbox hbox-accent"><strong>成本模型尚未验证：</strong>Chronicle 的后台 Agent 持续消耗 Rate Limit，社区大量反馈"额度快速耗尽"。$200/月的 Pro 订阅实际可用额度被显著压缩。这说明"全量持续感知"在当前模型成本下还不成熟，需要更精细的触发策略。</div>
         </div>
       </div>
 
       <div class="accordion">
         <div class="accordion-header" onclick="toggleAccordion(this)">
-          <h3>三个竞品的架构差异——不只是功能对比</h3>
+          <h3>三个竞品的架构差异</h3>
           <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="accordion-body">
-          <img class="arch-img" src="../img/comparison.jpg" alt="三款产品架构对比：Chronicle vs Claude Code vs Screenpipe">
+          <img class="arch-img" src="../img/comparison.jpg" alt="三款产品架构对比">
           <p class="arch-img-caption">▲ 三款 Screen-Aware 产品的核心架构差异</p>
-          <p><strong style="color:var(--green)">① OpenAI Codex Chronicle</strong> — <strong style="color:var(--text)">架构关键词：Ephemeral Agent + Vision Pipeline + Local Memory FS</strong><br>后台沙箱 Agent 定期截屏，云端处理后生成本地 Markdown 记忆。核心创新在于<strong style="color:var(--text)">将"环境感知"拆分为独立 Agent</strong>，与主交互 Agent 通过记忆文件系统解耦。</p>
-          <p><strong style="color:var(--orange)">② Anthropic Claude Code + Routines</strong> — <strong style="color:var(--text)">架构关键词：Workflow DAG + Computer Use + Rules Engine</strong><br>Routines 将 prompt + repo + connectors 封装为可复用流程，本质上是<strong style="color:var(--text)">声明式工作流引擎</strong>。Computer Use 提供直接操控桌面的能力，但更侧重"执行"而非"感知"。CLAUDE.md 作为项目级规则文件对标 AGENTS.md。</p>
-          <p><strong style="color:var(--cyan)">③ Screenpipe（MIT 开源）</strong> — <strong style="color:var(--text)">架构关键词：Continuous Recording + Local-first + MCP Server</strong><br>24/7 全量录屏 + 音频 Whisper 转写 → 全本地 SQLite 存储 → 暴露为 MCP Server 供任意 AI 工具查询。<strong style="color:var(--text)">最纯粹的"记录层"</strong>——不做推理，只做感知和存储。架构上最解耦，但也意味着需要其他 Agent 来消费数据。</p>
+          <p><strong style="color:var(--green)">① OpenAI Codex Chronicle</strong> — <strong style="color:var(--text)">Ephemeral Agent + Vision Pipeline + Local Memory FS</strong><br>后台沙箱 Agent 定期截屏，云端处理后生成本地 Markdown 记忆。核心特点是将"环境感知"拆分为独立 Agent，与主交互 Agent 通过记忆文件系统解耦。</p>
+          <p><strong style="color:var(--orange)">② Anthropic Claude Code + Routines</strong> — <strong style="color:var(--text)">Workflow DAG + Computer Use + Rules Engine</strong><br>Routines 将 prompt + repo + connectors 封装为可复用流程，本质上是声明式工作流引擎。Computer Use 提供直接操控桌面的能力，更侧重"执行"而非"感知"。CLAUDE.md 作为项目级规则文件管理上下文。</p>
+          <p><strong style="color:var(--cyan)">③ Screenpipe（MIT 开源）</strong> — <strong style="color:var(--text)">Continuous Recording + Local-first + MCP Server</strong><br>24/7 全量录屏 + 音频 Whisper 转写 → 全本地 SQLite 存储 → 暴露为 MCP Server 供任意 AI 工具查询。最纯粹的"记录层"——不做推理，只做感知和存储。</p>
         </div>
       </div>
 
@@ -597,16 +586,16 @@
           <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
         <div class="accordion-body">
-          <p>Chronicle 的隐私架构选择值得深入分析，因为这直接决定了产品的可用范围和企业级适配性：</p>
+          <p>隐私架构选择直接决定了产品的可用范围和企业级适配性：</p>
           <div class="sol-box">
             <h4>🔒 三种隐私架构对比</h4>
             <ul>
-              <li><strong>Chronicle："本地采集 + 云端处理 + 本地存储"</strong> — 截图存本地、发云端做视觉理解、记忆写回本地。结果：EU/UK/瑞士直接不可用，企业数据合规风险大。且本地 Markdown 文件未加密，同机器的其他程序可读取。</li>
-              <li><strong>Claude Code："云端全栈"</strong> — 会话和推理全在 Anthropic 云端。CLAUDE.md 文件本地但只是规则配置。隐私依赖 Anthropic 的数据政策。</li>
-              <li><strong>Screenpipe："全本地"</strong> — 采集、处理、存储全在设备端。隐私最强，但需要本地算力。数据永不离开设备。</li>
+              <li><strong>Chronicle："本地采集 + 云端处理 + 本地存储"</strong> — 截图存本地、发云端做视觉理解、记忆写回本地。EU/UK/瑞士直接不可用，且本地 Markdown 文件未加密。</li>
+              <li><strong>Claude Code："云端全栈"</strong> — 会话和推理全在 Anthropic 云端。CLAUDE.md 是本地规则配置。隐私依赖数据政策。</li>
+              <li><strong>Screenpipe："全本地"</strong> — 采集、处理、存储全在设备端。隐私最强，但需要本地算力。</li>
             </ul>
           </div>
-          <p><strong style="color:var(--text)">对 Pearl 的启示：</strong>Pearl 处理的是 TikTok Shop 商家经营数据——属于高敏感业务数据。Pearl 2.0 的 Memory 和 Context 方案必须采用<strong style="color:var(--accent)">"服务端处理 + 服务端存储 + 严格权限隔离"</strong>的架构，不能走 Chronicle 的"本地不加密"路线。</p>
+          <p><strong style="color:var(--text)">对 Pearl 的启示：</strong>Pearl 处理的是 TikTok Shop 商家经营数据。Pearl 2.0 的 Memory 和 Context 方案必须采用"服务端处理 + 服务端存储 + 严格权限隔离"的架构，不能走 Chronicle 的"本地不加密"路线。</p>
         </div>
       </div>
     </div>
@@ -622,21 +611,19 @@
           <thead><tr><th>维度</th><th>Codex Chronicle</th><th>Claude Code + Routines</th><th>Screenpipe（开源）</th></tr></thead>
           <tbody>
             <tr class="dim-row" onclick="toggleDim(this)"><td>核心架构</td><td>多 Agent + Vision Pipeline + 记忆 FS</td><td>Workflow DAG + Computer Use + Rules</td><td>Continuous Recording + MCP Server</td></tr>
-            <tr class="dim-detail"><td colspan="4"><strong style="color:var(--green)">Chronicle</strong>：后台沙箱 Agent（ephemeral session）定期截屏，云端视觉理解后生成本地 Markdown 记忆文件。Consolidation 模型可配置（默认 gpt-5.4-mini）。<br><strong style="color:var(--orange)">Claude Code</strong>：Routines 是声明式工作流引擎，将 prompt + repo + connectors 封装为可复用流程。Computer Use 提供直接桌面操控。<br><strong style="color:var(--cyan)">Screenpipe</strong>：纯感知层——连续捕获屏幕和系统音频，本地 OCR + Whisper 转写，数据暴露为 MCP Server 供任意 AI 消费。</td></tr>
+            <tr class="dim-detail"><td colspan="4"><strong style="color:var(--green)">Chronicle</strong>：后台沙箱 Agent 定期截屏，云端视觉理解后生成本地 Markdown 记忆。<br><strong style="color:var(--orange)">Claude Code</strong>：Routines 是声明式工作流引擎。Computer Use 提供桌面操控。<br><strong style="color:var(--cyan)">Screenpipe</strong>：纯感知层——连续捕获屏幕和音频，本地 OCR + Whisper 转写，暴露为 MCP Server。</td></tr>
             <tr class="dim-row" onclick="toggleDim(this)"><td>上下文来源</td><td>屏幕截图（视觉）</td><td>代码仓库+工具链+截屏</td><td>屏幕+音频+剪贴板+应用事件</td></tr>
-            <tr class="dim-detail"><td colspan="4">Chronicle 仅依赖视觉截图 + OCR 文本 + 时间信息 + 本地文件路径。Claude Code 以代码仓库和工具调用链为主。Screenpipe 最全面——屏幕、麦克风、系统音频、剪贴板全部采集。</td></tr>
+            <tr class="dim-detail"><td colspan="4">Chronicle 仅依赖视觉截图 + OCR + 时间信息。Claude Code 以代码仓库和工具调用链为主。Screenpipe 最全面——屏幕、麦克风、系统音频、剪贴板全部采集。</td></tr>
             <tr class="dim-row" onclick="toggleDim(this)"><td>记忆架构</td><td>本地未加密 MD + 自动 consolidation</td><td>云端会话 + 本地 CLAUDE.md 规则</td><td>100% 本地 SQLite + MCP 查询</td></tr>
-            <tr class="dim-detail"><td colspan="4">Chronicle 的记忆是"可读可编辑的 Markdown 资产"，用小模型做自动压缩合并（consolidation_model 可配置）。截图临时文件 6h 后自动清理。Claude Code 会话记忆在云端，项目级记忆通过 CLAUDE.md 维护。Screenpipe 全部数据存本地 SQLite，支持全文检索。</td></tr>
+            <tr class="dim-detail"><td colspan="4">Chronicle 的记忆是"可读可编辑的 Markdown"，用小模型做自动压缩合并。Claude Code 会话在云端，项目级记忆通过 CLAUDE.md 维护。Screenpipe 全部数据存本地 SQLite。</td></tr>
             <tr class="dim-row" onclick="toggleDim(this)"><td>Agent 协作模式</td><td><span class="tag tag-mid">前后台分离</span></td><td><span class="tag tag-high">单 Agent + 工具调用</span></td><td><span class="tag tag-low">纯数据管道</span></td></tr>
-            <tr class="dim-detail"><td colspan="4">Chronicle 首次在消费级产品中实现了"前台交互 Agent + 后台感知 Agent"的 multi-agent 协作。Claude Code 仍然是单一 Agent 通过工具调用扩展能力。Screenpipe 不包含 Agent，只提供数据管道。</td></tr>
+            <tr class="dim-detail"><td colspan="4">Chronicle 在消费级产品中呈现了"前台交互 Agent + 后台感知 Agent"的协作形态。Claude Code 仍然是单一 Agent 通过工具调用扩展。Screenpipe 不包含 Agent，只提供数据管道。</td></tr>
             <tr class="dim-row" onclick="toggleDim(this)"><td>隐私安全</td><td><span class="tag tag-high">较弱</span></td><td><span class="tag tag-mid">中等</span></td><td><span class="tag tag-low">最强</span></td></tr>
-            <tr class="dim-detail"><td colspan="4">Chronicle 截图发至 OpenAI 云端处理（处理后不永久存储），本地记忆文件未加密。明确警告存在 prompt injection 风险。EU/UK/瑞士不可用。Screenpipe 全本地处理，MIT 开源，数据不出设备。</td></tr>
+            <tr class="dim-detail"><td colspan="4">Chronicle 截图发至云端处理，本地记忆未加密，明确警告 prompt injection 风险，EU/UK/瑞士不可用。Screenpipe 全本地处理，MIT 开源。</td></tr>
             <tr class="dim-row" onclick="toggleDim(this)"><td>成本模型</td><td>持续消耗 Rate Limit（被动成本）</td><td>仅交互时消耗（主动成本）</td><td>本地算力（固定成本）</td></tr>
-            <tr class="dim-detail"><td colspan="4"><strong style="color:var(--red)">Chronicle 最大争议点：</strong>后台 Agent 持续消耗 Rate Limit，社区大量反馈"开启后额度快速耗尽"。$200/月 Pro 订阅的可用额度被显著压缩。Claude Code 仅在用户主动交互时消耗。Screenpipe 使用本地模型（Whisper 等），成本可控。</td></tr>
-            <tr class="dim-row" onclick="toggleDim(this)"><td>平台</td><td>仅 macOS (Apple Silicon)</td><td>macOS/Linux/Windows</td><td>macOS/Windows/Linux</td></tr>
-            <tr class="dim-detail"><td colspan="4">Chronicle 需要 macOS Screen Recording 和 Accessibility 权限。仅限 Apple Silicon Mac。Claude Code 跨平台。Screenpipe 三大桌面平台全部支持。</td></tr>
-            <tr class="dim-row" onclick="toggleDim(this)"><td>定价</td><td>Codex Pro $200/月</td><td>Claude Max $100–200/月</td><td>$400 买断/开源免费</td></tr>
-            <tr class="dim-detail"><td colspan="4">Chronicle 包含在 Codex Pro 订阅中但消耗额度（实际使用成本远高于标价）。Screenpipe 提供买断和开源自部署两种选择。</td></tr>
+            <tr class="dim-detail"><td colspan="4"><strong style="color:var(--red)">Chronicle 争议点：</strong>后台 Agent 持续消耗 Rate Limit，社区反馈"额度快速耗尽"。Claude Code 仅在用户主动交互时消耗。Screenpipe 使用本地模型，成本可控。</td></tr>
+            <tr class="dim-row" onclick="toggleDim(this)"><td>平台 / 定价</td><td>仅 macOS · Codex Pro $200/月</td><td>跨平台 · Max $100–200/月</td><td>跨平台 · $400 买断/开源免费</td></tr>
+            <tr class="dim-detail"><td colspan="4">Chronicle 仅限 Apple Silicon Mac。Claude Code 跨平台。Screenpipe 三大桌面平台全部支持，且提供买断和开源自部署。</td></tr>
           </tbody>
         </table>
       </div>
@@ -653,21 +640,21 @@
         <h3>多窗口调试 + 跨工具跳转</h3>
         <div class="brief">VSCode ↔ Chrome ↔ 飞书之间频繁切换时，Agent 自动关联所有窗口的上下文。</div>
         <div class="expand-hint">👆 点击展开详情</div>
-        <div class="detail">你在 VSCode 里调试一个支付接口 → 切到 Chrome 查看 Stripe Dashboard 错误日志 → 再切到飞书看同事发的排查截图。回到 Codex 时你只需说<strong style="color:var(--text)">"修复刚才那个 Stripe webhook 超时的问题"</strong>，Chronicle 已经从屏幕记忆中关联了错误码、Dashboard 状态和同事的上下文，<strong style="color:var(--green)">省去 5 分钟的复制粘贴和上下文重建</strong>。<br><br><strong style="color:var(--text)">架构解读：</strong>这个场景背后是 Chronicle 的后台 Agent 在持续工作——每隔一段时间截取屏幕，OCR 提取文字，Vision 模型理解布局语义，然后将"17:32 查看 Stripe webhook 超时错误 504"这类信息写入记忆文件。当你提问时，前台 Agent 检索记忆文件找到相关上下文。</div>
+        <div class="detail">你在 VSCode 里调试一个支付接口 → 切到 Chrome 查看 Stripe Dashboard 错误日志 → 再切到飞书看同事发的排查截图。回到 Codex 时你只需说<strong style="color:var(--text)">"修复刚才那个 Stripe webhook 超时的问题"</strong>，Chronicle 已经从屏幕记忆中关联了错误码和上下文。<br><br><strong style="color:var(--text)">背后的机制：</strong>后台 Agent 每隔一段时间截取屏幕、OCR 提取文字、Vision 模型理解布局语义，然后将关键信息写入记忆文件。前台 Agent 收到用户提问时检索记忆文件匹配上下文。</div>
       </div>
       <div class="click-card" onclick="this.classList.toggle('open')">
         <div class="scenario-label">场景 2</div>
         <h3>长周期项目的连续记忆</h3>
         <div class="brief">跨越数周的重构项目中，Agent 帮你记住两周前的工作状态。</div>
         <div class="expand-hint">👆 点击展开详情</div>
-        <div class="detail">你负责一个为期 3 周的重构项目，每天在不同模块间切换。两周后回到早期模块时，Chronicle 的记忆文件已经记录了你当时看到的测试失败截图、参考的设计文档和讨论的 PR 评论。直接说<strong style="color:var(--text)">"继续上次 auth module 的重构"</strong>即可。<br><br><strong style="color:var(--text)">记忆 Consolidation 机制：</strong>Chronicle 不会无限积累原始截图数据。通过 consolidation 模型（可配置为 gpt-5.4-mini）定期将短期记忆压缩为长期摘要，实现"记得住重点、忘得掉细节"的类人记忆效果。</div>
+        <div class="detail">负责一个 3 周重构项目，两周后回到早期模块时，Chronicle 的记忆文件记录了当时看到的测试失败截图和参考文档。直接说<strong style="color:var(--text)">"继续上次 auth module 的重构"</strong>即可。<br><br><strong style="color:var(--text)">Consolidation 机制：</strong>Chronicle 不会无限积累原始数据。通过小模型定期将短期记忆压缩为长期摘要——"记得住重点、忘得掉细节"。但值得注意的是，压缩过程本身也会丢失信息，对于需要精确回溯的场景可能不够。</div>
       </div>
       <div class="click-card" onclick="this.classList.toggle('open')">
-        <div class="scenario-label">场景 3</div>
+        <div class="scenario-label">场景 3 · 风险</div>
         <h3>Prompt Injection 风险场景</h3>
-        <div class="brief">Chronicle 的官方文档明确警告了屏幕内容注入攻击的风险。</div>
+        <div class="brief">Chronicle 的官方文档明确警告了屏幕内容注入攻击的风险——这不是边角问题。</div>
         <div class="expand-hint">👆 点击展开详情</div>
-        <div class="detail">如果你浏览了一个包含恶意 Agent 指令的网页（例如白色字体隐藏在页面中的"ignore all previous instructions"），Chronicle 可能将这些指令截屏并写入记忆文件，<strong style="color:var(--red)">后续 Codex 会话可能会遵循这些恶意指令</strong>。<br><br><strong style="color:var(--text)">这揭示了"屏幕感知型 Agent"的根本安全挑战：</strong>Agent 能看到的不仅是有用的上下文，也包括攻击面。任何做"被动感知"的产品（包括 Pearl 的 AI Accessible 方案）都需要在输入层做<strong style="color:var(--text)">内容审查和指令过滤</strong>。</div>
+        <div class="detail">如果浏览了包含恶意 Agent 指令的网页（例如白色字体隐藏的 "ignore all previous instructions"），Chronicle 可能将这些指令截屏并写入记忆文件，<strong style="color:var(--red)">后续 Codex 会话可能会遵循这些恶意指令</strong>。<br><br><strong style="color:var(--text)">这揭示了一个系统性挑战：</strong>Agent 能看到的越多，可被注入的攻击面就越大。任何做"被动感知"的产品（包括 Pearl 的 AI Accessible 方案）都需要在输入层做内容审查——特别是当读取的页面中包含用户输入的自由文本时。</div>
       </div>
     </div>
   </div>
@@ -678,28 +665,28 @@
       <h2>💡 Core Learnings</h2>
       <p class="lead">点击卡片展开完整分析</p>
       <div class="click-card bl" onclick="this.classList.toggle('open')">
-        <h3>1. 多 Agent 协作架构正在进入消费级产品</h3>
-        <div class="brief">Chronicle 首次在面向消费者的产品中实现"前台 Agent + 后台 Agent"分离。</div>
+        <h3>1. 感知、记忆、交互开始分层——这个趋势值得关注</h3>
+        <div class="brief">Chronicle 呈现出 Agent 从"单体"向"分层协作"演进的趋势。</div>
         <div class="expand-hint">👆 点击展开</div>
-        <div class="detail">Chronicle 的后台沙箱 Agent 有独立的 session 生命周期，通过文件系统（记忆 Markdown）与前台 Agent 通信。这不是简单的"调用一个工具"，而是<strong style="color:var(--accent)">真正的多 Agent 协作模式</strong>——后台 Agent 持续运行、自主决策（何时截屏、如何压缩记忆）、产出结果供其他 Agent 消费。<br><br><strong style="color:var(--accent)">启发：</strong>Pearl 2.0 的架构应该考虑"Agent 分层"——Tiko 前台处理对话，后台可以有专门的"数据巡检 Agent"（巡店场景）、"风险监控 Agent"（DeRisk 场景）持续运行并更新 Workspace Context。</div>
+        <div class="detail">Chronicle 的后台沙箱 Agent 有独立的 session，通过文件系统（记忆 Markdown）与前台 Agent 通信。这不是简单的"调用一个工具"，而是<strong style="color:var(--accent)">后台 Agent 持续运行、自主决策（何时截屏、如何压缩记忆）、产出结果供其他 Agent 消费</strong>。<br><br><strong style="color:var(--accent)">对 Pearl 的思考：</strong>Pearl 2.0 的架构可以考虑类似的分层——Tiko 前台处理对话，后台可以有专门的"数据巡检"或"风险监控"服务持续运行并更新 Workspace Context。但需要先验证基础的 Session / Memory 链路跑通后再引入。</div>
       </div>
       <div class="click-card bl green" onclick="this.classList.toggle('open')">
-        <h3>2. 记忆成为独立管理的"AI 资产"</h3>
-        <div class="brief">Chronicle 的记忆是可读、可编辑、可搜索的 Markdown 文件——这改变了数据模型。</div>
+        <h3>2. Memory 正在从对话副产品变成可管理的"AI 资产"</h3>
+        <div class="brief">Chronicle 的记忆是可读、可编辑、可搜索的文件——但"可管理"不等于"万能"。</div>
         <div class="expand-hint">👆 点击展开</div>
-        <div class="detail">传统 AI 产品的"记忆"藏在对话历史里，用户无法直接管理。Chronicle 和 Pearl PRD 中的 Resource 模块（AI Output / My Knowledge / My Upload / My Skill）指向同一个趋势：<strong style="color:var(--green)">AI 产出应该是用户可管理的一等资产</strong>。<br><br><strong style="color:var(--green)">启发：</strong>Pearl 2.0 的 Resource 模块设计方向正确。建议增加"Memory Explorer"——让 AM 可以看到 Tiko 记住了关于自己的什么信息、哪些记忆影响了推荐结果，并且可以编辑/删除。</div>
+        <div class="detail">传统 AI 产品的"记忆"藏在对话历史里。Chronicle 和 Pearl PRD 中的 Resource 模块（AI Output / My Knowledge / My Upload / My Skill）指向同一个趋势：<strong style="color:var(--green)">AI 产出成为用户可管理的一等资产</strong>。<br><br><strong style="color:var(--green)">对 Pearl 的建议：</strong>Resource 模块设计方向正确。可以考虑增加"Memory Explorer"——让 AM 看到 Tiko 记住了什么、可以编辑/删除。但 Memory 的价值在于<strong style="color:var(--text)">减少重复补充上下文</strong>，不在于替代规则、知识库或权限体系。</div>
       </div>
       <div class="click-card bl orange" onclick="this.classList.toggle('open')">
-        <h3>3. "感知层用小模型、推理层用大模型"的分层推理</h3>
-        <div class="brief">Chronicle 用 gpt-5.4-mini 做记忆 consolidation，大模型只在推理时调用。</div>
+        <h3>3. "小模型感知 + 大模型推理"的分层推理可以借鉴</h3>
+        <div class="brief">Chronicle 用 gpt-5.4-mini 做记忆 consolidation——感知压缩和交互推理的成本分离。</div>
         <div class="expand-hint">👆 点击展开</div>
-        <div class="detail">Chronicle 将 AI 推理分成两层：<strong style="color:var(--text)">感知/压缩层</strong>（截屏理解、记忆合并，用小模型）和<strong style="color:var(--text)">推理/对话层</strong>（处理用户请求，用大模型）。这是控制成本的关键架构决策。<br><br><strong style="color:var(--orange)">启发：</strong>Tiko 的 Workspace Context Summary、个人 Memory consolidation、事件摘要生成都应该用小模型/轻量模型处理。只有在 AM 直接对话时才调用完整的 Agent 推理链。这可以将"被动感知"的成本降低 80%+。</div>
+        <div class="detail">Chronicle 将 AI 推理分成两层：<strong style="color:var(--text)">感知/压缩层</strong>（用小模型）和<strong style="color:var(--text)">推理/对话层</strong>（用大模型）。这是控制成本的关键架构决策。<br><br><strong style="color:var(--orange)">对 Pearl 的建议：</strong>Tiko 的 Context Summary、个人 Memory consolidation、事件摘要生成都适合用小模型处理。只有在 AM 直接对话时才调用完整的 Agent 推理链。这可以将"被动感知"的成本控制在合理范围。</div>
       </div>
       <div class="click-card bl purple" onclick="this.classList.toggle('open')">
-        <h3>4. Prompt Injection 是"屏幕感知"的系统性风险</h3>
-        <div class="brief">Chronicle 官方文档明确警告了屏幕内容注入攻击——这不是 edge case，是架构级问题。</div>
+        <h3>4. Prompt Injection 是所有"被动感知"产品的系统性风险</h3>
+        <div class="brief">Chronicle 官方文档罕见地直接警告了屏幕内容注入攻击——这是架构级问题。</div>
         <div class="expand-hint">👆 点击展开</div>
-        <div class="detail">OpenAI 在 Chronicle 文档中罕见地直接写明："Using Chronicle increases risk to prompt injection attacks from screen content." 这意味着任何做"被动感知"的 AI 产品都面临<strong style="color:var(--purple)">输入层攻击面扩大</strong>的问题——Agent 能看到的越多，可被注入的面就越大。<br><br><strong style="color:var(--purple)">启发：</strong>Pearl 的 AI Accessible 方案（Agent 读取页面结构化数据）比 Chronicle 的截屏方案安全得多（结构化 JSON vs 任意屏幕内容），但仍需要在 Agent 输入层做指令过滤——特别是当读取的 Pearl 页面中包含商家输入的自由文本时。</div>
+        <div class="detail">任何做"被动感知"的 AI 产品都面临输入层攻击面扩大的问题——Agent 能看到的越多，可被注入的面就越大。<br><br><strong style="color:var(--purple)">对 Pearl 的建议：</strong>Pearl 的 AI Accessible 方案（结构化 JSON）比 Chronicle 的截屏方案安全得多，但仍需要在 Agent 输入层做指令过滤——特别是当读取的 Pearl 页面包含商家输入的自由文本时。建议在 AI Accessible 改造中同步建立输入清洗规范。</div>
       </div>
     </div>
   </div>
