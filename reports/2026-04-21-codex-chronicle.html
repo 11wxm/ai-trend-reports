@@ -6,20 +6,22 @@
 <title>编程助手开始自己看屏幕了 — Codex Chronicle 深度拆解</title>
 <style>
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d2e;
-    --surface2: #232740;
-    --border: #2e3348;
-    --text: #e4e6f0;
-    --text-dim: #8b8fa8;
-    --accent: #6c7eff;
-    --accent-glow: rgba(108,126,255,0.15);
-    --green: #34d399;
-    --orange: #fb923c;
-    --red: #f87171;
-    --purple: #a78bfa;
-    --cyan: #22d3ee;
-    --pink: #f472b6;
+    --bg: #f8f9fc;
+    --surface: #ffffff;
+    --surface2: #f1f3f8;
+    --border: #e2e5ef;
+    --text: #1a1d2e;
+    --text-dim: #6b7194;
+    --accent: #4f5bd5;
+    --accent-light: rgba(79,91,213,0.08);
+    --accent-mid: rgba(79,91,213,0.15);
+    --green: #0d9f6e;
+    --green-light: rgba(13,159,110,0.08);
+    --orange: #e67e22;
+    --red: #dc2626;
+    --purple: #7c3aed;
+    --cyan: #0ea5e9;
+    --pink: #d63384;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
@@ -30,7 +32,7 @@
 
   /* Back nav */
   .back-nav {
-    padding:12px 24px; background:rgba(15,17,23,0.95); border-bottom:1px solid var(--border);
+    padding:14px 24px; background:var(--surface); border-bottom:1px solid var(--border);
     display:flex; align-items:center;
   }
   .back-link {
@@ -39,50 +41,42 @@
   }
   .back-link:hover { color:var(--accent); }
 
-  /* ===== Hero ===== */
+  /* Hero */
   .hero {
-    position:relative; padding:72px 24px 48px; text-align:center;
-    background: linear-gradient(180deg, rgba(108,126,255,0.08) 0%, transparent 100%);
-    border-bottom:1px solid var(--border);
-  }
-  .hero::before {
-    content:''; position:absolute; top:-200px; left:50%; transform:translateX(-50%);
-    width:600px; height:600px;
-    background: radial-gradient(circle, rgba(108,126,255,0.12) 0%, transparent 70%);
-    pointer-events:none;
+    position:relative; padding:60px 24px 40px; text-align:center;
+    background:var(--surface); border-bottom:1px solid var(--border);
   }
   .hero-badge {
-    display:inline-block; padding:6px 16px; border-radius:20px;
+    display:inline-block; padding:5px 16px; border-radius:20px;
     font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
-    color:var(--accent); background:var(--accent-glow); border:1px solid rgba(108,126,255,0.25);
-    margin-bottom:20px;
+    color:var(--accent); background:var(--accent-light); border:1px solid var(--accent-mid);
+    margin-bottom:18px;
   }
   .hero h1 {
-    font-size:2.2em; font-weight:800; line-height:1.25; margin-bottom:16px;
-    background: linear-gradient(135deg, #fff 30%, var(--accent));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    font-size:2em; font-weight:800; line-height:1.3; margin-bottom:16px;
+    color:var(--text);
   }
   .value-liner {
-    max-width:720px; margin:0 auto 20px; padding:16px 24px;
-    background: linear-gradient(135deg, rgba(52,211,153,0.10), rgba(108,126,255,0.10));
-    border:1px solid rgba(52,211,153,0.25); border-radius:12px;
-    font-size:1em; font-weight:500; line-height:1.6; color:var(--text); text-align:center;
+    max-width:720px; margin:0 auto 18px; padding:16px 24px;
+    background:var(--green-light); border:1px solid rgba(13,159,110,0.2); border-radius:12px;
+    font-size:.95em; font-weight:500; line-height:1.6; color:var(--text); text-align:center;
   }
   .value-liner .hl { color:var(--green); font-weight:700; }
   .source-row {
-    display:flex; justify-content:center; gap:12px; flex-wrap:wrap;
-    margin-top:10px; font-size:.8em;
+    display:flex; justify-content:center; gap:16px; flex-wrap:wrap;
+    margin-top:10px; font-size:.82em;
   }
   .source-link {
-    color:var(--text-dim); text-decoration:none; font-size:0.92em;
-    transition:color .2s;
+    color:var(--text-dim); text-decoration:none; transition:color .2s;
   }
-  .source-link:hover { color:var(--accent); text-decoration:underline; text-underline-offset:3px; }
-  .hero-meta { display:flex; justify-content:center; gap:20px; font-size:13px; color:var(--text-dim); flex-wrap:wrap; }
+  .source-link:hover { color:var(--accent); text-decoration:underline; }
+  .hero-meta {
+    display:flex; justify-content:center; gap:20px; font-size:.8em; color:var(--text-dim); flex-wrap:wrap;
+  }
 
-  /* ===== Nav ===== */
+  /* Nav */
   .nav-bar {
-    position:sticky; top:0; z-index:100; background:rgba(15,17,23,0.92); backdrop-filter:blur(12px);
+    position:sticky; top:0; z-index:100; background:rgba(248,249,252,0.95); backdrop-filter:blur(12px);
     border-bottom:1px solid var(--border); padding:12px 24px;
     display:flex; justify-content:center; gap:8px; flex-wrap:wrap;
   }
@@ -91,38 +85,36 @@
     color:var(--text-dim); background:var(--surface); border:1px solid var(--border);
     cursor:pointer; transition:all .2s; white-space:nowrap; user-select:none;
   }
-  .nav-pill:hover { border-color:var(--accent); color:var(--text); }
-  .nav-pill.active { background:var(--accent-glow); border-color:var(--accent); color:var(--accent); }
+  .nav-pill:hover { border-color:var(--accent); color:var(--accent); }
+  .nav-pill.active { background:var(--accent); border-color:var(--accent); color:#fff; }
 
   .container { max-width:960px; margin:0 auto; padding:0 24px; }
 
-  /* ===== Sections ===== */
-  .section { padding:48px 0; border-bottom:1px solid var(--border); display:none; }
+  /* Sections */
+  .section { padding:40px 0; border-bottom:1px solid var(--border); display:none; }
   .section.active { display:block; }
   .section:last-of-type { border-bottom:none; }
-
   .section-icon {
     display:inline-flex; align-items:center; justify-content:center;
-    width:40px; height:40px; border-radius:12px; font-size:20px; margin-bottom:16px;
+    width:40px; height:40px; border-radius:12px; font-size:20px; margin-bottom:14px;
   }
-  .icon-search  { background:rgba(108,126,255,0.15); }
-  .icon-compare { background:rgba(251,146,60,0.15); }
-  .icon-usecase { background:rgba(52,211,153,0.15); }
-  .icon-learning{ background:rgba(167,139,250,0.15); }
-  .icon-biz     { background:rgba(244,114,182,0.15); }
+  .icon-search  { background:var(--accent-light); }
+  .icon-compare { background:rgba(230,126,34,0.08); }
+  .icon-usecase { background:var(--green-light); }
+  .icon-learning{ background:rgba(124,58,237,0.08); }
+  .icon-biz     { background:rgba(214,51,132,0.08); }
+  .section h2 { font-size:1.4em; font-weight:700; margin-bottom:6px; }
+  .section .lead { color:var(--text-dim); font-size:.9em; margin-bottom:22px; }
+  .section p { margin-bottom:12px; font-size:.92em; }
 
-  .section h2 { font-size:1.45em; font-weight:700; margin-bottom:8px; }
-  .section .lead { color:var(--text-dim); font-size:.93em; margin-bottom:24px; }
-  .section p { margin-bottom:14px; font-size:.93em; }
-
-  /* ===== Accordion ===== */
-  .accordion { margin-bottom:16px; border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  /* Accordion */
+  .accordion { margin-bottom:14px; border:1px solid var(--border); border-radius:12px; overflow:hidden; background:var(--surface); }
   .accordion-header {
     display:flex; align-items:center; justify-content:space-between;
-    padding:16px 20px; background:var(--surface); cursor:pointer; user-select:none; transition:background .2s;
+    padding:16px 20px; cursor:pointer; user-select:none; transition:background .2s;
   }
   .accordion-header:hover { background:var(--surface2); }
-  .accordion-header h3 { font-size:.95em; font-weight:700; }
+  .accordion-header h3 { font-size:.93em; font-weight:700; }
   .accordion-arrow {
     width:20px; height:20px; transition:transform .3s;
     color:var(--text-dim); flex-shrink:0; margin-left:12px;
@@ -130,52 +122,59 @@
   .accordion.open .accordion-arrow { transform:rotate(180deg); }
   .accordion-body {
     max-height:0; overflow:hidden; transition:max-height .4s ease, padding .3s;
-    padding:0 20px; background:var(--surface);
+    padding:0 20px;
   }
   .accordion.open .accordion-body { max-height:3000px; padding:0 20px 20px; }
 
-  /* ===== Highlight Box ===== */
+  /* Highlight Box */
   .highlight-box {
-    background:linear-gradient(135deg, rgba(108,126,255,0.08), rgba(167,139,250,0.06));
-    border:1px solid rgba(108,126,255,0.2); border-radius:12px;
-    padding:18px 22px; margin:16px 0; font-size:.9em;
+    background:var(--accent-light); border:1px solid var(--accent-mid);
+    border-radius:12px; padding:16px 20px; margin:14px 0; font-size:.9em;
   }
   .highlight-box strong { color:var(--accent); }
   .highlight-box.pink {
-    background:linear-gradient(135deg, rgba(244,114,182,0.08), rgba(108,126,255,0.06));
-    border-color:rgba(244,114,182,0.25);
+    background:rgba(214,51,132,0.06); border-color:rgba(214,51,132,0.2);
   }
   .highlight-box.pink strong { color:var(--pink); }
+  .highlight-box.green {
+    background:var(--green-light); border-color:rgba(13,159,110,0.2);
+  }
+  .highlight-box.green strong { color:var(--green); }
+  .highlight-box.orange {
+    background:rgba(230,126,34,0.06); border-color:rgba(230,126,34,0.2);
+  }
+  .highlight-box.orange strong { color:var(--orange); }
 
-  /* ===== Table ===== */
+  /* Table */
   .table-wrap {
     overflow-x:auto; border-radius:12px; border:1px solid var(--border); background:var(--surface);
   }
-  table { width:100%; border-collapse:collapse; font-size:.85em; }
+  table { width:100%; border-collapse:collapse; font-size:.84em; }
   thead th {
     background:var(--surface2); padding:13px 14px; text-align:left; font-weight:700;
     white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;
   }
   tbody td { padding:11px 14px; border-bottom:1px solid var(--border); vertical-align:top; }
   tbody tr:last-child td { border-bottom:none; }
-  tbody tr:hover { background:rgba(108,126,255,0.04); }
+  tbody tr:hover { background:var(--accent-light); }
   td:first-child { font-weight:600; color:var(--accent); white-space:nowrap; min-width:100px; }
   .dim-row { cursor:pointer; }
-  .dim-row:hover td { background:rgba(108,126,255,0.06); }
+  .dim-row:hover td { background:rgba(79,91,213,0.04); }
   .dim-detail { display:none; }
   .dim-row.expanded + .dim-detail { display:table-row; }
   .dim-detail td { padding:10px 14px 14px 28px; color:var(--text-dim); font-size:.88em; border-bottom:1px solid var(--border); }
 
-  /* ===== Tags ===== */
+  /* Tags */
   .tag { display:inline-block; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:600; }
-  .tag-high { background:rgba(248,113,113,0.15); color:var(--red); }
-  .tag-mid  { background:rgba(251,146,60,0.15); color:var(--orange); }
-  .tag-low  { background:rgba(52,211,153,0.15); color:var(--green); }
+  .tag-high { background:rgba(220,38,38,0.08); color:var(--red); }
+  .tag-mid  { background:rgba(230,126,34,0.08); color:var(--orange); }
+  .tag-low  { background:var(--green-light); color:var(--green); }
 
-  /* ===== Scenario ===== */
+  /* Scenario */
   .scenario {
     background:var(--surface); border:1px solid var(--border); border-radius:14px;
-    padding:22px 24px; margin-bottom:16px; cursor:pointer; transition:border-color .2s;
+    padding:22px 24px; margin-bottom:14px; cursor:pointer; transition:border-color .2s;
+    box-shadow:0 1px 3px rgba(0,0,0,0.03);
   }
   .scenario:hover { border-color:var(--green); }
   .scenario-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--green); margin-bottom:8px; }
@@ -186,53 +185,71 @@
   .scenario .expand-hint { font-size:.8em; color:var(--accent); margin-top:8px; }
   .scenario.open .expand-hint { display:none; }
 
-  /* ===== Learning Cards ===== */
+  /* Learning Cards */
   .learning-card {
     background:var(--surface); border:1px solid var(--border); border-radius:14px;
-    padding:22px 24px; margin-bottom:16px; border-left:3px solid var(--accent);
-    cursor:pointer; transition:border-color .2s;
+    padding:22px 24px; margin-bottom:14px; border-left:3px solid var(--accent);
+    cursor:pointer; transition:border-color .2s; box-shadow:0 1px 3px rgba(0,0,0,0.03);
   }
   .learning-card:nth-child(2) { border-left-color:var(--green); }
   .learning-card:nth-child(3) { border-left-color:var(--orange); }
   .learning-card:nth-child(4) { border-left-color:var(--purple); }
   .learning-card:hover { border-color:var(--accent); }
-  .learning-card h3 { font-size:.95em; font-weight:700; margin-bottom:4px; }
+  .learning-card h3 { font-size:.93em; font-weight:700; margin-bottom:4px; }
   .learning-card .brief { font-size:.88em; color:var(--text-dim); }
   .learning-card .detail { display:none; font-size:.9em; color:var(--text-dim); margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
   .learning-card.open .detail { display:block; }
   .learning-card .expand-hint { font-size:.8em; color:var(--accent); margin-top:6px; }
   .learning-card.open .expand-hint { display:none; }
 
-  /* ===== Biz Cards (new module) ===== */
+  /* Biz Cards */
   .biz-card {
     background:var(--surface); border:1px solid var(--border); border-radius:14px;
-    padding:22px 24px; margin-bottom:16px; border-left:3px solid var(--pink);
-    cursor:pointer; transition:border-color .2s;
+    padding:22px 24px; margin-bottom:14px; border-left:3px solid var(--pink);
+    cursor:pointer; transition:border-color .2s; box-shadow:0 1px 3px rgba(0,0,0,0.03);
   }
   .biz-card:nth-child(2) { border-left-color:var(--cyan); }
   .biz-card:nth-child(3) { border-left-color:var(--orange); }
+  .biz-card:nth-child(4) { border-left-color:var(--green); }
+  .biz-card:nth-child(5) { border-left-color:var(--purple); }
   .biz-card:hover { border-color:var(--pink); }
-  .biz-card h3 { font-size:.95em; font-weight:700; margin-bottom:4px; }
+  .biz-card h3 { font-size:.93em; font-weight:700; margin-bottom:4px; }
   .biz-card .brief { font-size:.88em; color:var(--text-dim); }
   .biz-card .detail { display:none; font-size:.9em; color:var(--text-dim); margin-top:10px; padding-top:10px; border-top:1px solid var(--border); }
   .biz-card.open .detail { display:block; }
   .biz-card .expand-hint { font-size:.8em; color:var(--pink); margin-top:6px; }
   .biz-card.open .expand-hint { display:none; }
 
-  /* ===== TL;DR ===== */
+  /* Solution Box — new component for actionable solutions */
+  .solution-box {
+    background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:18px 22px; margin:12px 0; font-size:.9em;
+  }
+  .solution-box h4 {
+    font-size:.88em; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:6px;
+  }
+  .solution-box ul { padding-left:18px; margin:0; }
+  .solution-box li { margin-bottom:6px; color:var(--text-dim); }
+  .solution-box li strong { color:var(--text); }
+
+  /* TL;DR */
   .tldr-bar {
     background:var(--surface); border:1px solid var(--border); border-radius:14px;
-    padding:20px 24px; margin:32px 0 0;
+    padding:20px 24px; margin:28px 0 0;
   }
-  .tldr-bar h3 { font-size:.95em; font-weight:700; margin-bottom:8px; color:var(--cyan); }
+  .tldr-bar h3 { font-size:.93em; font-weight:700; margin-bottom:8px; color:var(--accent); }
   .tldr-bar p { font-size:.88em; color:var(--text-dim); margin-bottom:0; }
 
-  /* ===== Footer ===== */
-  .footer { text-align:center; padding:36px 24px; font-size:12px; color:var(--text-dim); border-top:1px solid var(--border); }
+  /* Footer */
+  .footer {
+    text-align:center; padding:32px 24px; font-size:.78em; color:var(--text-dim);
+    border-top:1px solid var(--border);
+  }
+  .footer a { color:var(--accent); text-decoration:none; }
 
   @media (max-width:640px) {
-    .hero h1 { font-size:1.6em; }
-    .hero { padding:52px 20px 36px; }
+    .hero h1 { font-size:1.5em; }
+    .hero { padding:44px 20px 32px; }
     .nav-bar { gap:6px; padding:10px 16px; }
     .nav-pill { padding:7px 12px; font-size:12px; }
     table { font-size:.8em; }
@@ -244,19 +261,19 @@
 
 <!-- Back to home -->
 <div class="back-nav">
-  <a class="back-link" href="../index.html">← 返回周报主页</a>
+  <a class="back-link" href="../index.html">← 返回主页</a>
 </div>
 
-<!-- ===== Hero ===== -->
+<!-- Hero -->
 <div class="hero">
-  <div class="hero-badge">📊 AI 竞品深度拆解</div>
+  <div class="hero-badge">AI 竞品深度拆解</div>
   <h1>编程助手开始自己看屏幕了</h1>
   <div class="value-liner">
-    ⚡ OpenAI Codex 新推出 Chronicle — 让 AI 编程助手从「用户喂上下文」进化到「<span class="hl">Agent 自己看屏幕</span>」。本报告横向对比 3 款产品，帮你看清这个范式转移的机会和坑。
+    OpenAI Codex 新推出 Chronicle — 让 AI 编程助手从「用户喂上下文」进化到「<span class="hl">Agent 自己看屏幕</span>」。本报告横向对比 3 款产品，帮你看清这个范式转移的机会和坑。
     <div class="source-row">
-      <a href="https://9to5mac.com/2026/04/20/codex-for-mac-gains-chronicle-for-enhancing-context-using-recent-screen-content/" target="_blank" class="source-link">📄 Codex Chronicle 原文 →</a>
-      <a href="https://code.claude.com/docs/en/routines" target="_blank" class="source-link">📄 Claude Code Routines 文档 →</a>
-      <a href="https://github.com/screenpipe/screenpipe" target="_blank" class="source-link">📄 Screenpipe GitHub →</a>
+      <a href="https://9to5mac.com/2026/04/20/codex-for-mac-gains-chronicle-for-enhancing-context-using-recent-screen-content/" target="_blank" class="source-link">Codex Chronicle 原文 →</a>
+      <a href="https://code.claude.com/docs/en/routines" target="_blank" class="source-link">Claude Code Routines 文档 →</a>
+      <a href="https://github.com/screenpipe/screenpipe" target="_blank" class="source-link">Screenpipe GitHub →</a>
     </div>
   </div>
   <div class="hero-meta">
@@ -265,18 +282,18 @@
   </div>
 </div>
 
-<!-- ===== Nav ===== -->
+<!-- Nav -->
 <div class="nav-bar">
-  <div class="nav-pill active" data-target="sec-origin">🔍 研究缘起</div>
-  <div class="nav-pill" data-target="sec-compare">⚔️ 横向对比</div>
-  <div class="nav-pill" data-target="sec-usecase">🎯 使用场景</div>
-  <div class="nav-pill" data-target="sec-learning">💡 核心启发</div>
-  <div class="nav-pill" data-target="sec-biz">🏪 跟运营中台的关系</div>
+  <div class="nav-pill active" data-target="sec-origin">研究缘起</div>
+  <div class="nav-pill" data-target="sec-compare">横向对比</div>
+  <div class="nav-pill" data-target="sec-usecase">使用场景</div>
+  <div class="nav-pill" data-target="sec-learning">核心启发</div>
+  <div class="nav-pill" data-target="sec-biz">跟运营中台的关系</div>
 </div>
 
 <div class="container">
 
-  <!-- ====== 1. 研究缘起 ====== -->
+  <!-- 1. 研究缘起 -->
   <div class="section active" id="sec-origin">
     <div class="section-icon icon-search">🔍</div>
     <h2>研究缘起</h2>
@@ -319,7 +336,7 @@
     </div>
   </div>
 
-  <!-- ====== 2. 横向对比 ====== -->
+  <!-- 2. 横向对比 -->
   <div class="section" id="sec-compare">
     <div class="section-icon icon-compare">⚔️</div>
     <h2>赛道横向对比</h2>
@@ -359,7 +376,7 @@
     </div>
   </div>
 
-  <!-- ====== 3. 使用场景 ====== -->
+  <!-- 3. 使用场景 -->
   <div class="section" id="sec-usecase">
     <div class="section-icon icon-usecase">🎯</div>
     <h2>典型使用场景</h2>
@@ -367,7 +384,7 @@
 
     <div class="scenario" onclick="this.classList.toggle('open')">
       <div class="scenario-label">场景 1</div>
-      <h3>🖥️ 多窗口调试 + 跨工具跳转</h3>
+      <h3>多窗口调试 + 跨工具跳转</h3>
       <div class="brief">VSCode ↔ Chrome ↔ 飞书之间频繁切换时，Agent 自动关联所有窗口的上下文。</div>
       <div class="expand-hint">👆 点击展开详情</div>
       <div class="detail">你在 VSCode 里调试一个支付接口 → 切到 Chrome 查看 Stripe Dashboard 错误日志 → 再切到飞书看同事发的排查截图。回到 Codex 时你只需说<strong>"修复刚才那个 Stripe webhook 超时的问题"</strong>，Chronicle 已经从屏幕记忆中关联了错误码、Dashboard 状态和同事的上下文，<strong>省去 5 分钟的复制粘贴和上下文重建</strong>。</div>
@@ -375,14 +392,14 @@
 
     <div class="scenario" onclick="this.classList.toggle('open')">
       <div class="scenario-label">场景 2</div>
-      <h3>📅 长周期项目的连续记忆</h3>
+      <h3>长周期项目的连续记忆</h3>
       <div class="brief">跨越数周的重构项目中，Agent 帮你记住两周前的工作状态。</div>
       <div class="expand-hint">👆 点击展开详情</div>
       <div class="detail">你负责一个为期 3 周的重构项目，每天在不同模块间切换。两周后回到早期模块时，Chronicle 的记忆文件已经记录了你当时看到的测试失败截图、参考的设计文档和讨论的 PR 评论。你不再需要翻 Git log 重建心智模型，直接说<strong>"继续上次 auth module 的重构"</strong>即可。</div>
     </div>
   </div>
 
-  <!-- ====== 4. 核心启发 ====== -->
+  <!-- 4. 核心启发 -->
   <div class="section" id="sec-learning">
     <div class="section-icon icon-learning">💡</div>
     <h2>Core Learnings</h2>
@@ -417,7 +434,7 @@
     </div>
   </div>
 
-  <!-- ====== 5. 跟运营中台的关系 (NEW) ====== -->
+  <!-- 5. 跟运营中台的关系 — ENHANCED VERSION -->
   <div class="section" id="sec-biz">
     <div class="section-icon icon-biz">🏪</div>
     <h2>跟运营中台的关系</h2>
@@ -434,7 +451,15 @@
       <div class="detail">
         目前 Tiko 回答商家问题时，主要依赖当前会话上下文和知识库检索。但商家的真实问题往往涉及之前的操作——比如"我刚才改了一下物流模板怎么没生效"。<br><br>
         如果 Tiko 能感知商家在 Seller Center 的<strong>最近操作序列</strong>（类似 Chronicle 的屏幕记忆），就可以直接关联到"你 5 分钟前修改了物流模板 A 的 XX 字段"，省去商家来回描述的成本。<br><br>
-        <strong>可落地方向：</strong>Tiko 接入 Seller Center 操作日志作为"中期记忆"层，在会话中自动引用商家最近的关键操作。
+
+        <div class="solution-box">
+          <h4>💡 具体落地方案</h4>
+          <ul>
+            <li><strong>接入 Seller Center 操作日志：</strong>Tiko 会话开启时，自动拉取该商家最近 30 分钟的关键操作事件（页面跳转、设置变更、订单操作等），作为"中期记忆"注入对话上下文。</li>
+            <li><strong>操作-问题关联模型：</strong>训练一个轻量分类器，识别"商家当前问题"与"最近操作"的关联度。例如商家问物流问题，自动召回最近的物流设置变更操作。</li>
+            <li><strong>成本可控：</strong>不是 always-on 录制，而是<strong>会话触发 + 按需回溯</strong>。仅在商家发起对话时查询最近操作，单次增加约 500-1000 tokens 的上下文，推理成本增量极低。</li>
+          </ul>
+        </div>
       </div>
     </div>
 
@@ -448,31 +473,115 @@
         • <strong>短期</strong>：Pearl 当前页面状态<br>
         • <strong>中期</strong>：最近 30 分钟跨系统操作摘要（类似 Chronicle 的屏幕记忆）<br>
         • <strong>长期</strong>：运营人员的常用策略偏好和历史决策模式<br><br>
-        <strong>可落地方向：</strong>Pearl 的 AI 助手（如果有）可以自动汇总运营人员跨系统的操作轨迹，在切换回 Pearl 时提供上下文恢复摘要。
+
+        <div class="solution-box">
+          <h4>💡 具体落地方案</h4>
+          <ul>
+            <li><strong>"操作回忆"侧边栏：</strong>Pearl 内嵌一个 AI 侧边栏，自动汇总运营人员过去 1 小时内在 Pearl + 数据看板的操作轨迹，切换回来时一句话告诉你"你刚才在看 XX 商家的 GMV 下滑数据，对比了 3 个竞品"。</li>
+            <li><strong>策略推荐引擎：</strong>基于运营人员的历史决策模式（长期记忆），在相似场景出现时主动推荐策略。比如"上次遇到类似 GMV 下滑，你执行了 XX 促销策略，效果提升 15%"。</li>
+            <li><strong>跨系统剪贴板：</strong>运营在数据看板复制的数据、在飞书讨论的结论，自动同步到 Pearl 的 AI 助手，切换回来不丢失上下文。</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="biz-card" onclick="this.classList.toggle('open')">
-      <h3>💰 成本与合规：always-on 感知在我们的场景可行吗？</h3>
-      <div class="brief">持续感知的 ROI 核算 + 电商数据合规特殊性。</div>
+      <h3>💰 ROI 不高怎么办？—— 持续感知的成本优化方案</h3>
+      <div class="brief">如果 always-on 感知的推理成本 ROI 不高，有哪些更聪明的做法？</div>
       <div class="expand-hint">👆 点击展开</div>
       <div class="detail">
         Chronicle 的 always-on 模式消耗大量 API 额度。对于 Tiko 这样的高并发场景（数十万商家同时在线），全量感知操作记录的推理成本会非常高。<br><br>
-        更现实的路径是<strong>事件驱动 + 按需感知</strong>：只在商家发起咨询时回溯最近操作，而非 24/7 持续录制。这既控制成本，也规避了持续采集操作数据带来的合规风险（电商场景涉及交易数据、商家隐私）。<br><br>
-        <strong>结论：</strong>Chronicle 的 always-on 模式不适合直接照搬，但"操作记忆 + 按需检索"的轻量版完全可以成为 Tiko 和 Pearl 的下一个能力升级点。
+
+        <div class="highlight-box orange">
+          <strong>核心问题：</strong>如果"持续感知"的 ROI 不高——即大部分时候 Agent 感知到的上下文并没有被用到——怎么办？
+        </div>
+
+        <div class="solution-box">
+          <h4>🔧 方案 1：事件驱动替代轮询</h4>
+          <ul>
+            <li>不做 24/7 持续截屏/录制，而是<strong>监听关键事件</strong>：设置变更、订单状态异常、商家发起咨询。</li>
+            <li>只在事件触发时回溯最近操作记录，推理成本降低 90%+。</li>
+            <li><strong>类比：</strong>从"每秒截屏"变成"关键动作才拍照"。</li>
+          </ul>
+        </div>
+
+        <div class="solution-box">
+          <h4>🔧 方案 2：分层缓存 + 摘要压缩</h4>
+          <ul>
+            <li><strong>热层（5 分钟内）：</strong>完整操作序列，直接注入上下文。</li>
+            <li><strong>温层（5-60 分钟）：</strong>用小模型摘要为 1-2 句话，节省 tokens。</li>
+            <li><strong>冷层（1 小时以上）：</strong>仅保留操作关键词索引，按需检索。</li>
+            <li>这套架构让每次对话的上下文增量控制在 <strong>500-2000 tokens</strong>，成本几乎可忽略。</li>
+          </ul>
+        </div>
+
+        <div class="solution-box">
+          <h4>🔧 方案 3：用户反馈驱动的自适应感知</h4>
+          <ul>
+            <li>初期默认<strong>最小感知</strong>（仅当前页面状态），当 Tiko 答不好时，用户点"不满意"触发<strong>深度回溯</strong>。</li>
+            <li>系统记录哪些品类/问题类型的"回溯"被频繁触发，逐步对这些场景<strong>自动开启感知</strong>。</li>
+            <li><strong>好处：</strong>让数据告诉你哪些场景值得"always-on"，避免拍脑袋。ROI 通过实际使用动态优化。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="biz-card" onclick="this.classList.toggle('open')">
+      <h3>🧠 更大的想象空间：还能从这个趋势借鉴什么？</h3>
+      <div class="brief">跳出"操作记忆"，这个"Agent 自主感知"的范式还能怎么用？</div>
+      <div class="expand-hint">👆 点击展开</div>
+      <div class="detail">
+
+        <div class="solution-box">
+          <h4>💡 想法 1：Tiko "预判式"客服</h4>
+          <ul>
+            <li>不等商家来问，<strong>Tiko 主动发现问题</strong>。监控商家 Seller Center 的操作模式，检测到异常操作（比如反复修改同一个设置、在某个页面停留过长），主动弹出"需要帮助吗？"。</li>
+            <li><strong>类比 Chronicle：</strong>Chronicle 是"看到你在做什么，下次你问的时候我已经懂了"；Tiko 可以是"看到你在卡住，我主动来帮你"。</li>
+            <li><strong>价值：</strong>从被动客服变成主动运营助手，NPS 和解决率双提升。</li>
+          </ul>
+        </div>
+
+        <div class="solution-box">
+          <h4>💡 想法 2：Pearl "运营 Copilot" —— 从工具到搭档</h4>
+          <ul>
+            <li>借鉴 Claude Code Routines 的"可复用工作流"概念：运营人员的日常操作（巡检商家数据 → 发现异常 → 执行策略 → 记录结果）可以封装为<strong>运营 Routine</strong>。</li>
+            <li>Pearl AI Copilot 观察运营人员的操作模式，<strong>自动生成 Routine 模板</strong>："检测到你每周一都做 XX 巡检，要不要我帮你自动化这个流程？"</li>
+            <li><strong>终极目标：</strong>把 Pearl 从"运营用的工具"升级为"跟运营一起干活的 AI 搭档"。</li>
+          </ul>
+        </div>
+
+        <div class="solution-box">
+          <h4>💡 想法 3：跨商家知识迁移</h4>
+          <ul>
+            <li>Screenpipe 的"全量记录 + 检索"思路可以映射到<strong>跨商家知识库</strong>：A 商家遇到的物流设置问题，解决方案自动沉淀，B 商家遇到类似问题时 Tiko 直接引用。</li>
+            <li>目前 Tiko 的知识库是人工维护的，如果能<strong>从真实对话中自动提取和沉淀解决方案</strong>（类似 Chronicle 自动生成记忆），知识库的更新频率和质量都会大幅提升。</li>
+            <li><strong>关键指标：</strong>知识库覆盖率从 X% 提升到 Y%，首次解决率提升 Z%。</li>
+          </ul>
+        </div>
+
+        <div class="solution-box">
+          <h4>💡 想法 4：合规友好的"操作影子"</h4>
+          <ul>
+            <li>电商场景涉及交易数据和商家隐私，不能像 Screenpipe 那样全量录制。但可以做<strong>"操作影子"</strong>：只记录操作类型和对象 ID，不记录具体数值。</li>
+            <li>例如记录"商家 A 修改了物流模板 B 的配送区域字段"，但不记录具体改成了什么值。需要时通过 ID 实时查询最新状态。</li>
+            <li><strong>好处：</strong>既获得操作上下文的关联能力，又避免存储敏感交易数据，合规风险最小化。</li>
+          </ul>
+        </div>
       </div>
     </div>
 
     <div class="tldr-bar">
-      <h3>📌 对运营中台的一句话总结</h3>
-      <p>"Agent 自己看屏幕"映射到我们的业务就是<strong>"Tiko 自己看操作记录 + Pearl 自动恢复跨系统上下文"</strong>。不需要 always-on，用事件驱动的轻量版"操作记忆"就能显著减少商家和运营的上下文搬运成本。</p>
+      <h3>📌 对运营中台的行动建议</h3>
+      <p><strong>短期（1-2 个月）：</strong>Tiko 接入 Seller Center 操作日志，实现"会话触发 + 按需回溯"的轻量操作记忆，预计可提升首次解决率 10-15%。</p>
+      <p style="margin-top:8px;"><strong>中期（1 个季度）：</strong>Pearl 上线"操作回忆"侧边栏 + 策略推荐引擎，减少运营的上下文重建时间。同时用反馈数据验证哪些场景值得 always-on 感知。</p>
+      <p style="margin-top:8px;"><strong>长期（2-3 个季度）：</strong>构建"运营 Routine"自动化框架 + 跨商家知识自动沉淀，把 Tiko 和 Pearl 从工具升级为 AI 搭档。</p>
     </div>
   </div>
 
 </div>
 
 <div class="footer">
-  <a href="../index.html" style="color:var(--accent);text-decoration:none;">← 返回周报主页</a> · AI 产品趋势嗅探 · TikTok Shop 运营中台 · 2026-04-21
+  <a href="../index.html">← 返回主页</a> · AI产品Research · TikTok Shop 运营中台 · 2026-04-21
 </div>
 
 <script>
