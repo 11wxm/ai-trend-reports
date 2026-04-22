@@ -356,6 +356,63 @@
   .arch-img-caption { font-size: .82em; color: var(--text-muted); text-align: center; margin: -10px 0 18px; }
 </style></head>
 <body>
+
+<!-- Top Bar -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <a class="logo" href="../index.html"><div class="logo-icon">AI</div> AI产品Research</a>
+    <div class="nav-divider"></div>
+    <div class="top-tabs">
+      <a class="top-tab active" href="../index.html?cat=agent">Agent</a>
+      <a class="top-tab" href="../index.html?cat=skill">Skill</a>
+      <a class="top-tab" href="../index.html?cat=model">模型</a>
+      <a class="top-tab" href="../index.html?cat=arch">架构</a>
+      <a class="top-tab" href="../index.html?cat=ux">用户体验</a>
+    </div>
+  </div>
+  <div class="top-bar-right">
+    <div class="search-wrap-sm">
+      <svg class="search-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input class="search-sm" type="text" placeholder="搜索…" id="searchInput">
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- Report Hero -->
+  <div class="report-hero">
+    <span class="hero-badge">Agent · 深度拆解</span>
+    <h1>编程助手开始自己看屏幕了</h1>
+    <div class="value-liner">
+      OpenAI Codex 新推出 Chronicle — 让 AI 编程助手从「用户喂上下文」进化到「<span class="hl">Agent 自己看屏幕</span>」。本报告横向对比 3 款产品，拆解其架构设计背后的取舍，分析哪些思路对 Pearl 2.0 有参考价值，以及<span class="hl">为什么 Pearl 不应该照搬 Chronicle</span>。
+    </div>
+    <div class="source-btns">
+      <a href="https://9to5mac.com/2026/04/20/codex-for-mac-gains-chronicle-for-enhancing-context-using-recent-screen-content/" target="_blank" class="source-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Codex Chronicle 原文
+      </a>
+      <a href="https://developers.openai.com/codex/memories/chronicle" target="_blank" class="source-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Chronicle 官方文档
+      </a>
+      <a href="https://code.claude.com/docs/en/routines" target="_blank" class="source-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Claude Code Routines
+      </a>
+      <a href="https://github.com/screenpipe/screenpipe" target="_blank" class="source-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Screenpipe GitHub
+      </a>
+    </div>
+    <div class="hero-meta">
+      <span>📅 2026-04-21</span>
+      <span>🏷️ Screen Context · Agent Memory · DevTools · Architecture</span>
+    </div>
+  </div>
+
+  <!-- Section Tabs -->
+
   <!-- Section Tabs — new design: 总论 + 分论点 -->
   <div class="section-tabs-wrap">
     <div class="section-tabs">
