@@ -3,22 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI 产品趋势周报 | TikTok Shop 运营中台</title>
+<title>AI产品Research</title>
 <style>
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d2e;
-    --surface2: #232740;
-    --border: #2e3348;
-    --text: #e4e6f0;
-    --text-dim: #8b8fa8;
-    --accent: #6c7eff;
-    --accent-glow: rgba(108,126,255,0.15);
-    --green: #34d399;
-    --orange: #fb923c;
-    --pink: #f472b6;
-    --cyan: #22d3ee;
-    --purple: #a78bfa;
+    --bg: #f8f9fc;
+    --surface: #ffffff;
+    --surface2: #f1f3f8;
+    --border: #e2e5ef;
+    --text: #1a1d2e;
+    --text-dim: #6b7194;
+    --accent: #4f5bd5;
+    --accent-light: rgba(79,91,213,0.08);
+    --accent-mid: rgba(79,91,213,0.15);
+    --green: #0d9f6e;
+    --green-light: rgba(13,159,110,0.08);
+    --orange: #e67e22;
+    --pink: #d63384;
+    --cyan: #0ea5e9;
+    --purple: #7c3aed;
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body {
@@ -27,179 +29,211 @@
     -webkit-font-smoothing: antialiased; min-height:100vh;
   }
 
+  /* Top bar */
+  .top-bar {
+    display:flex; justify-content:space-between; align-items:center;
+    max-width:960px; margin:0 auto; padding:20px 24px 0;
+  }
+  .top-bar .logo {
+    font-size:1.1em; font-weight:800; color:var(--accent);
+    letter-spacing:-0.5px;
+  }
+  .top-bar .contact {
+    font-size:.82em; color:var(--text-dim);
+  }
+  .top-bar .contact a { color:var(--accent); text-decoration:none; }
+  .top-bar .contact a:hover { text-decoration:underline; }
+
   /* Hero */
   .hero {
-    position:relative; padding:80px 24px 60px; text-align:center;
-    background: linear-gradient(180deg, rgba(108,126,255,0.08) 0%, transparent 100%);
-    border-bottom:1px solid var(--border);
-  }
-  .hero::before {
-    content:''; position:absolute; top:-200px; left:50%; transform:translateX(-50%);
-    width:700px; height:700px;
-    background: radial-gradient(circle, rgba(108,126,255,0.10) 0%, transparent 70%);
-    pointer-events:none;
+    max-width:960px; margin:0 auto; padding:48px 24px 36px; text-align:center;
   }
   .hero-badge {
-    display:inline-block; padding:6px 18px; border-radius:20px;
-    font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
-    color:var(--cyan); background:rgba(34,211,238,0.10); border:1px solid rgba(34,211,238,0.25);
-    margin-bottom:24px;
+    display:inline-block; padding:5px 16px; border-radius:20px;
+    font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+    color:var(--accent); background:var(--accent-light); border:1px solid var(--accent-mid);
+    margin-bottom:20px;
   }
   .hero h1 {
-    font-size:2.6em; font-weight:800; line-height:1.2; margin-bottom:16px;
-    background: linear-gradient(135deg, #fff 30%, var(--accent));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    font-size:2.4em; font-weight:800; line-height:1.2; margin-bottom:14px;
+    color:var(--text);
   }
   .hero .subtitle {
-    font-size:1.05em; color:var(--text-dim); max-width:600px; margin:0 auto 28px;
+    font-size:1em; color:var(--text-dim); max-width:600px; margin:0 auto 24px;
+    line-height:1.6;
   }
-  .hero-stats {
-    display:flex; justify-content:center; gap:40px; flex-wrap:wrap;
+
+  /* Stats */
+  .stats {
+    display:flex; justify-content:center; gap:32px; flex-wrap:wrap;
+    padding-bottom:32px; border-bottom:1px solid var(--border);
+    max-width:960px; margin:0 auto;
   }
-  .stat { text-align:center; }
+  .stat-item { text-align:center; }
   .stat-num { font-size:1.8em; font-weight:800; color:var(--accent); }
-  .stat-label { font-size:.8em; color:var(--text-dim); margin-top:2px; }
+  .stat-label { font-size:.78em; color:var(--text-dim); font-weight:500; }
 
-  /* Container */
-  .container { max-width:800px; margin:0 auto; padding:48px 24px 80px; }
-
-  .section-title {
-    font-size:1.1em; font-weight:700; color:var(--text-dim); letter-spacing:1px;
-    text-transform:uppercase; margin-bottom:24px;
-    display:flex; align-items:center; gap:10px;
+  /* Category Tabs */
+  .tab-section {
+    max-width:960px; margin:0 auto; padding:28px 24px 0;
   }
-  .section-title::after {
-    content:''; flex:1; height:1px; background:var(--border);
+  .tab-bar {
+    display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px;
+  }
+  .tab-pill {
+    padding:7px 18px; border-radius:20px; font-size:.82em; font-weight:600;
+    color:var(--text-dim); background:var(--surface); border:1px solid var(--border);
+    cursor:pointer; transition:all .2s; user-select:none;
+  }
+  .tab-pill:hover { border-color:var(--accent); color:var(--accent); }
+  .tab-pill.active {
+    background:var(--accent); border-color:var(--accent); color:#fff;
   }
 
-  /* Report Card */
+  /* Report Cards */
+  .reports-grid {
+    max-width:960px; margin:0 auto; padding:0 24px 60px;
+    display:grid; gap:16px;
+  }
   .report-card {
-    display:block; text-decoration:none; color:var(--text);
-    background:var(--surface); border:1px solid var(--border); border-radius:16px;
-    padding:28px 28px 24px; margin-bottom:20px;
-    transition:all .25s ease; position:relative; overflow:hidden;
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:24px 28px; display:flex; justify-content:space-between; align-items:center;
+    text-decoration:none; color:inherit; transition:all .2s;
+    box-shadow:0 1px 3px rgba(0,0,0,0.04);
   }
   .report-card:hover {
-    border-color:var(--accent); transform:translateY(-2px);
-    box-shadow: 0 8px 32px rgba(108,126,255,0.12);
+    border-color:var(--accent); box-shadow:0 4px 16px rgba(79,91,213,0.10);
+    transform:translateY(-2px);
   }
-  .report-card::before {
-    content:''; position:absolute; top:0; left:0; width:4px; height:100%;
-    border-radius:16px 0 0 16px;
+  .report-card .card-left { flex:1; }
+  .report-card .card-cat {
+    display:inline-block; padding:3px 10px; border-radius:6px;
+    font-size:11px; font-weight:600; margin-bottom:8px;
   }
-  .report-card:nth-child(2)::before { background:var(--accent); }
-  .report-card:nth-child(3)::before { background:var(--green); }
-  .report-card:nth-child(4)::before { background:var(--orange); }
-  .report-card:nth-child(5)::before { background:var(--pink); }
-  .report-card:nth-child(6)::before { background:var(--purple); }
+  .cat-agent { background:rgba(79,91,213,0.08); color:var(--accent); }
+  .cat-llm { background:rgba(124,58,237,0.08); color:var(--purple); }
+  .cat-infra { background:rgba(14,165,233,0.08); color:var(--cyan); }
+  .cat-product { background:rgba(13,159,110,0.08); color:var(--green); }
+  .cat-other { background:rgba(230,126,34,0.08); color:var(--orange); }
 
-  .card-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; }
-  .card-date {
-    font-size:.78em; font-weight:600; color:var(--text-dim);
-    background:var(--surface2); padding:4px 12px; border-radius:8px;
-    white-space:nowrap;
+  .report-card h3 {
+    font-size:1.05em; font-weight:700; margin-bottom:4px; line-height:1.4;
   }
-  .card-new {
-    font-size:.7em; font-weight:700; color:var(--green);
-    background:rgba(52,211,153,0.12); padding:3px 10px; border-radius:6px;
-    letter-spacing:.5px; text-transform:uppercase;
+  .report-card .card-meta {
+    font-size:.8em; color:var(--text-dim); display:flex; gap:16px; flex-wrap:wrap;
   }
+  .report-card .card-arrow {
+    font-size:1.2em; color:var(--text-dim); flex-shrink:0; margin-left:16px;
+    transition:color .2s;
+  }
+  .report-card:hover .card-arrow { color:var(--accent); }
 
-  .card-title {
-    font-size:1.2em; font-weight:700; margin-bottom:8px; line-height:1.35;
-  }
-  .card-desc {
-    font-size:.9em; color:var(--text-dim); line-height:1.6; margin-bottom:14px;
-  }
-  .card-tags { display:flex; gap:8px; flex-wrap:wrap; }
-  .card-tag {
-    font-size:.75em; font-weight:600; padding:3px 10px; border-radius:6px;
-    background:var(--surface2); color:var(--text-dim);
-  }
-
-  .card-arrow {
-    position:absolute; right:24px; top:50%; transform:translateY(-50%);
-    color:var(--text-dim); transition:color .2s, transform .2s;
-    font-size:1.2em;
-  }
-  .report-card:hover .card-arrow { color:var(--accent); transform:translateY(-50%) translateX(4px); }
-
-  /* Empty state */
+  /* Coming soon */
   .coming-soon {
-    text-align:center; padding:40px; color:var(--text-dim);
-    border:1px dashed var(--border); border-radius:16px;
+    background:var(--surface2); border:2px dashed var(--border); border-radius:14px;
+    padding:40px 24px; text-align:center;
   }
-  .coming-soon-emoji { font-size:2em; margin-bottom:12px; }
+  .coming-soon .icon { font-size:2em; margin-bottom:12px; }
+  .coming-soon h3 { font-size:1em; font-weight:600; color:var(--text-dim); margin-bottom:4px; }
+  .coming-soon p { font-size:.85em; color:var(--text-dim); }
 
   /* Footer */
   .footer {
-    text-align:center; padding:40px 24px; font-size:.8em; color:var(--text-dim);
-    border-top:1px solid var(--border);
+    text-align:center; padding:32px 24px; font-size:.78em; color:var(--text-dim);
+    border-top:1px solid var(--border); max-width:960px; margin:0 auto;
   }
+  .footer a { color:var(--accent); text-decoration:none; }
 
   @media (max-width:640px) {
-    .hero h1 { font-size:1.8em; }
-    .hero { padding:60px 20px 40px; }
-    .hero-stats { gap:24px; }
-    .report-card { padding:20px 20px 18px; }
-    .card-title { font-size:1.05em; }
+    .hero h1 { font-size:1.7em; }
+    .hero { padding:36px 20px 24px; }
+    .stats { gap:20px; }
+    .stat-num { font-size:1.4em; }
+    .report-card { padding:18px 20px; }
   }
 </style>
 </head>
 <body>
 
+<div class="top-bar">
+  <div class="logo">AI产品Research</div>
+  <div class="contact">联系：<a href="mailto:ph_EMAIL_1_ph">ph_EMAIL_1_ph</a></div>
+</div>
+
 <div class="hero">
-  <div class="hero-badge">🏪 TikTok Shop 运营中台</div>
-  <h1>AI 产品趋势周报</h1>
-  <p class="subtitle">每周精选 AI 行业产品动态，深度拆解竞品，关联 Pearl & Tiko 业务场景。</p>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num">1</div>
-      <div class="stat-label">已发布报告</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">3</div>
-      <div class="stat-label">产品对比</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">4</div>
-      <div class="stat-label">核心启发</div>
-    </div>
+  <div class="hero-badge">Weekly Research</div>
+  <h1>AI产品Research</h1>
+  <p class="subtitle">每周追踪 AI 产品趋势，深度拆解竞品动态，为 TikTok Shop 运营中台提供可落地的产品洞察。</p>
+</div>
+
+<div class="stats">
+  <div class="stat-item">
+    <div class="stat-num" id="stat-total">1</div>
+    <div class="stat-label">已发布报告</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">5+</div>
+    <div class="stat-label">竞品追踪</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">Weekly</div>
+    <div class="stat-label">更新频率</div>
   </div>
 </div>
 
-<div class="container">
+<div class="tab-section">
+  <div class="tab-bar">
+    <div class="tab-pill active" data-cat="all">全部</div>
+    <div class="tab-pill" data-cat="agent">Agent / 助手</div>
+    <div class="tab-pill" data-cat="llm">大模型</div>
+    <div class="tab-pill" data-cat="product">产品设计</div>
+    <div class="tab-pill" data-cat="infra">基础设施</div>
+    <div class="tab-pill" data-cat="other">其他</div>
+  </div>
+</div>
 
-  <div class="section-title">📑 已发布报告</div>
-
-  <a class="report-card" href="./reports/2026-04-21-codex-chronicle.html">
-    <div class="card-top">
-      <span class="card-date">📅 2026-04-21</span>
-      <span class="card-new">✨ 最新</span>
+<div class="reports-grid">
+  <!-- Report 1 -->
+  <a class="report-card" href="reports/2026-04-21-codex-chronicle.html" data-cat="agent">
+    <div class="card-left">
+      <div class="card-cat cat-agent">Agent / 助手</div>
+      <h3>编程助手开始自己看屏幕了 — Codex Chronicle 深度拆解</h3>
+      <div class="card-meta">
+        <span>📅 2026-04-21</span>
+        <span>🏷️ Screen Context · Agent Memory · DevTools</span>
+      </div>
     </div>
-    <div class="card-title">编程助手开始自己看屏幕了</div>
-    <div class="card-desc">OpenAI Codex Chronicle 让 Agent 通过屏幕感知自动建立工作环境理解。横向对比 Codex Chronicle vs Claude Code Routines vs Screenpipe，拆解范式转移的机会和坑。</div>
-    <div class="card-tags">
-      <span class="card-tag">Screen Context</span>
-      <span class="card-tag">Agent Memory</span>
-      <span class="card-tag">DevTools</span>
-      <span class="card-tag">Tiko 启发</span>
-      <span class="card-tag">Pearl 启发</span>
-    </div>
-    <span class="card-arrow">→</span>
+    <div class="card-arrow">→</div>
   </a>
 
-  <!-- 未来报告占位 -->
+  <!-- Coming Soon -->
   <div class="coming-soon">
-    <div class="coming-soon-emoji">📝</div>
-    更多报告每周更新，敬请期待...
+    <div class="icon">📡</div>
+    <h3>更多报告即将发布</h3>
+    <p>每周更新 AI 产品趋势深度分析</p>
   </div>
-
 </div>
 
 <div class="footer">
-  AI 产品趋势嗅探 · TikTok Shop 运营中台 · Powered by Trend Analyzer
+  AI产品Research · TikTok Shop 运营中台 · <a href="mailto:ph_EMAIL_1_ph">ph_EMAIL_1_ph</a>
 </div>
 
+<script>
+  // Category tab filter
+  document.querySelectorAll('.tab-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.tab-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      const cat = pill.getAttribute('data-cat');
+      document.querySelectorAll('.report-card').forEach(card => {
+        if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    });
+  });
+</script>
 </body>
 </html>
