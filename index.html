@@ -194,9 +194,10 @@
   }
   .knowledge-card h2::before { content: '📚'; -webkit-text-fill-color: initial; }
   .knowledge-card .lead { font-size: .88em; color: var(--text-dim); margin-bottom: 22px; }
+  .k-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
   .k-main {
     background: var(--surface2); border: 1px solid var(--border); border-radius: 12px;
-    padding: 22px 24px; margin-bottom: 16px;
+    padding: 22px 24px;
   }
   .k-main h3 {
     font-size: .98em; font-weight: 700; color: var(--text); margin-bottom: 8px;
@@ -209,14 +210,20 @@
   }
   .k-pearl { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
   .k-tiko { background: var(--cyan-bg); color: var(--cyan); border: 1px solid var(--cyan-border); }
-  .k-sub-label {
-    font-size: .78em; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
-    color: var(--text-light); margin: 16px 0 10px; padding-top: 14px;
-    border-top: 1px solid var(--border);
+  .k-evolve {
+    background: linear-gradient(135deg, rgba(249,141,202,0.04), rgba(123,138,255,0.04));
+    border: 1px dashed var(--border-light, #3d4270); border-radius: 12px;
+    padding: 22px 24px;
   }
+  .k-evolve-label {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: .82em; font-weight: 700; color: var(--pink);
+    margin-bottom: 12px;
+  }
+  .k-evolve-label .arrow { color: var(--text-light); }
   .k-sub-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .k-sub {
-    background: var(--surface3); border: 1px solid var(--border); border-radius: 10px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 10px;
     padding: 14px 16px;
   }
   .k-sub h4 {
@@ -244,8 +251,10 @@
     .tab-bar { padding: 16px 16px 6px; }
     .knowledge-section { padding: 0 16px 36px; }
     .knowledge-card { padding: 26px 22px; }
+    .k-row { grid-template-columns: 1fr; }
     .k-sub-grid { grid-template-columns: 1fr; }
   }
+</style>
 </style>
 </head>
 <body>
@@ -311,25 +320,33 @@
     <h2>关于运营中台</h2>
     <p class="lead">本站所有报告的分析视角均基于以下业务背景。了解这些概念有助于理解每篇报告中"对运营中台的启发"部分。</p>
 
-    <div class="k-main">
-      <h3><span class="k-badge k-pearl">Pearl</span> 运营工作台</h3>
-      <p>Pearl 是 TikTok Shop 运营中台的核心工作台，承载 1000+ Web Tool，服务全球 AM（Account Manager）的日常运营工作。当前正在从传统工具集合升级为 AI Native 平台，以 CUI（对话式交互）为主入口，同时兼容存量 GUI 工具。</p>
-      <div class="k-sub-label">Pearl 2.0 升级方向 ↓</div>
-      <div class="k-sub-grid">
-        <div class="k-sub">
-          <h4><span class="k-dot green"></span> Workspace 工作空间</h4>
-          <p>按运营场景划分的沉浸式工作空间。每个 Workspace 拥有独立的 Skill 范围和上下文积累。Q2 计划：Analysis（经营分析）、DeRisk（经营降险）、Campaign（大促管理）。</p>
-        </div>
-        <div class="k-sub">
-          <h4><span class="k-dot orange"></span> 应用四层分类</h4>
-          <p>AI Native（CUI 为主）→ AI Accessible（AI 可读取页面）→ AI Enabled（GUI + Copilot 副驾）→ Non-AI（传统工具）。支持从旧范式向新范式渐进演进。</p>
-        </div>
+    <!-- Pearl + Tiko 并列 -->
+    <div class="k-row">
+      <div class="k-main">
+        <h3><span class="k-badge k-pearl">Pearl</span> 运营工作台</h3>
+        <p>TikTok Shop 运营中台的核心工作台，承载 1000+ Web Tool，服务全球 AM（Account Manager）的日常运营工作——包括商家管理、数据分析、风控处置、营销活动等。</p>
+      </div>
+      <div class="k-main">
+        <h3><span class="k-badge k-tiko">Tiko</span> AI 运营助手</h3>
+        <p>运营中台的 AI 助手，当前以飞书机器人形态运行。擅长解决商家经营问题、回答业务知识、调用垂域 Skill 查询数据，全球 DAU 持续增长，Agent 形态已被充分验证。</p>
       </div>
     </div>
 
-    <div class="k-main">
-      <h3><span class="k-badge k-tiko">Tiko</span> AI 运营助手</h3>
-      <p>Tiko 是运营中台的 AI 助手，当前以飞书机器人形态运行，正在迁移至 Pearl 首页成为 Web 端全屏版。擅长解决商家经营问题、回答业务知识、调用垂域 Skill 查询数据。在 Pearl 2.0 中将成为所有 AI Native 能力的统一 CUI 入口。</p>
+    <!-- 2.0 升级方向 -->
+    <div class="k-evolve">
+      <div class="k-evolve-label">
+        <span class="arrow">↓</span> Pearl + Tiko → Pearl 2.0 · AI Native 升级（进行中）
+      </div>
+      <div class="k-sub-grid">
+        <div class="k-sub">
+          <h4><span class="k-dot green"></span> Workspace 工作空间</h4>
+          <p>按运营场景划分的沉浸式工作空间。Tiko 迁移至 Pearl 首页成为统一 CUI 入口，Workspace 拥有独立 Skill 范围和上下文。Q2 计划：Analysis · DeRisk · Campaign。</p>
+        </div>
+        <div class="k-sub">
+          <h4><span class="k-dot orange"></span> 应用四层分类</h4>
+          <p>AI Native（CUI 为主）→ AI Accessible（AI 可读取页面）→ AI Enabled（GUI + Copilot 副驾）→ Non-AI。支持存量工具从旧范式向新范式渐进演进。</p>
+        </div>
+      </div>
     </div>
   </div>
 </div>
