@@ -385,7 +385,7 @@
     <span class="hero-badge">Agent · 深度拆解</span>
     <h1>编程助手开始自己看屏幕了</h1>
     <div class="value-liner">
-      OpenAI Codex 新推出 Chronicle — 让 AI 编程助手从「用户喂上下文」进化到「<span class="hl">Agent 自己看屏幕</span>」。本报告横向对比 3 款产品，拆解其架构设计背后的取舍，分析哪些思路对 Pearl 2.0 有参考价值，以及<span class="hl">为什么 Pearl 不应该照搬 Chronicle</span>。
+      OpenAI Codex 新推出 Chronicle — 让 AI 编程助手从「用户喂上下文」进化到「<span class="hl">Agent 自己看屏幕</span>」。本报告横向对比 3 款产品，拆解其架构设计背后的取舍，分析哪些思路对 Pearl 2.0 有参考价值，以及<span class="hl">Pearl 如何走出自己的不同路径</span>。
     </div>
     <div class="source-btns">
       <a href="https://9to5mac.com/2026/04/20/codex-for-mac-gains-chronicle-for-enhancing-context-using-recent-screen-content/" target="_blank" class="source-btn">
@@ -432,7 +432,7 @@
       <h2>🔥 对 Pearl 2.0 框架升级的启发</h2>
       <p class="lead">Chronicle 验证了一件事：<strong style="color:var(--text)">Agent 需要自动获取用户当前工作上下文</strong>，否则每轮对话都要用户手工补充背景。这个需求在运营中台同样成立。但值得注意的是，Pearl 的最优实现路径和 Chronicle 不同——不是复制视觉感知链路，而是利用 Pearl 自身的结构化数据优势。</p>
       <div class="biz-context">
-        <strong>当前方案背景：</strong>Pearl 2.0 正在从传统工具平台升级为 AI Native 平台。<span class="pearl-badge">Pearl</span> 作为运营工作台将采用 CUI + Canvas 双区架构；<span class="tiko-badge">Tiko</span> 作为 AI 助手将成为 Pearl 首页的主入口，通过 <span class="workspace-badge">Workspace</span> 按场景组织能力（Analysis / DeRisk / Campaign）。430 内测版 → 515 对外版 v1 → 619 对外版 V2 分三期交付。
+        <strong>当前方案背景：</strong><span class="pearl-badge">Pearl</span> 运营工作台正在升级为 AI Native 平台，<span class="tiko-badge">Tiko</span> 作为 AI 助手将成为 Pearl 首页主入口，通过 <span class="workspace-badge">Workspace</span> 按场景组织能力。以下启发均基于这一升级方向展开。
       </div>
       <img class="arch-img" src="../img/mapping.jpg" alt="Chronicle 概念 → Pearl 2.0 架构映射">
       <p class="arch-img-caption">▲ Chronicle 核心概念与 Pearl 2.0 架构的对应关系——注意 Pearl 应选择不同于 Chronicle 的实现路径</p>
@@ -440,20 +440,18 @@
 
     <!-- 启发一: AI Accessible -->
     <div class="click-card bl cyan" onclick="this.classList.toggle('open')">
-      <h3>🖥️ 启发一：Pearl 更适合走 AI Accessible，而不是复制 Chronicle 的视觉感知</h3>
+      <h3>🖥️ 启发一：Pearl 更适合走 AI Accessible，发挥结构化数据优势</h3>
       <div class="brief">Chronicle 说明 Agent 需要自动获取工作上下文。但在运营中台，页面本身可以被结构化读取——这比截屏 OCR 更准确、更安全、更便宜。</div>
       <div class="expand-hint">👆 点击展开详细分析</div>
       <div class="detail">
         <div class="hbox hbox-cyan"><strong>Chronicle 暴露的问题：</strong>用户在多窗口间切换时，AI 助手无法感知用户正在看什么。Chronicle 用"后台截屏 → OCR → 文本摘要"来解决。但这条 Vision Pipeline 有明显代价：信息损耗大、持续消耗 Rate Limit、存在 prompt injection 风险（屏幕上的恶意内容可能被注入记忆）。</div>
 
-        <p><strong style="color:var(--text)">在运营中台，这个问题同样存在：</strong>AM 在 Pearl 上操作 Seller Mgmt 看商家数据时，切到 Tiko 提问还得手动复制商家 ID 和罚单信息。但 Pearl 的优势在于——<strong style="color:var(--cyan)">页面本身就在 Pearl 域下</strong>，不需要截屏。</p>
-
-        <p><strong style="color:var(--text)">因此 Pearl 应该优先建设 AI Accessible，而不是模仿 Chronicle：</strong>PRD 已规划 Canvas 的"工具调起"组件——Agent 可直接读取 Pearl 页面的结构化数据（类似 CLI 接口）。这比 Chronicle 的截屏方案精度更高、成本更低、安全性更好。</p>
+        <p><strong style="color:var(--text)">Pearl 的关键差异：</strong>运营中台的页面本身就在 Pearl 域下，天然具备结构化读取能力，不需要走截屏 OCR 这条路。AI Accessible 方案让 Agent 直接读取页面数据，比视觉感知精度更高、成本更低、安全性更好。</p>
 
         <div class="sol-box">
           <h4>💡 建议落地方式</h4>
           <ul>
-            <li><strong>515 版优先：</strong>完成 Thunder Shop / Seller Mgmt / Shop Performance 三个 P0 页面的 AI Accessible 改造。每个页面输出标准化 JSON 供 Tiko 调用。</li>
+            <li><strong>优先级：</strong>从最高频的运营页面开始推进 AI Accessible 改造，每个页面输出标准化 JSON 供 Tiko 调用。</li>
             <li><strong>场景串联：</strong>AM 在 Canvas 打开 Seller Mgmt → Tiko 自动读取页面中的商家信息 → AM 在 CUI 问"这个商家 SPS 为什么掉了"，Tiko 已知具体商家和数据。</li>
             <li><strong>安全约束：</strong>AI Accessible 读取的页面如果包含商家自由输入的文本，仍需做内容过滤——Chronicle 的 prompt injection 教训在此同样适用。建议在 AI Accessible 改造中同步建立输入清洗规范。</li>
           </ul>
@@ -469,15 +467,15 @@
       <div class="detail">
         <div class="hbox hbox-pink"><strong>Chronicle 暴露的问题：</strong>当一个 Agent 处理多种任务时，不同任务的上下文会互相干扰。Chronicle 通过将记忆存在不同的 Markdown 文件中来做隐式隔离。这个思路可以映射到 Pearl 的 Workspace——每个 Workspace 本质上就是"按运营场景分文件夹"。</div>
 
-        <p><strong style="color:var(--text)">在运营中台，这个问题同样成立：</strong>AM 的降险问题和经营分析是完全不同的工作场景。如果 Tiko 把降险对话中积累的上下文带到分析场景，会造成干扰。当前 PRD 中 Workspace 级 Memory 标注为"2期再考虑做"。</p>
+        <p><strong style="color:var(--text)">在运营中台，这个问题同样成立：</strong>AM 的降险问题和经营分析是完全不同的工作场景。如果 Tiko 把降险对话中积累的上下文带到分析场景，会造成干扰。Workspace 级 Memory 目前规划为后续版本推进。</p>
 
         <p><strong style="color:var(--text)">Pearl 可以先用轻量方案验证：</strong>不需要等完整的 Workspace Memory 方案。先在每个 Workspace 维护一个 Context Summary——类似 Chronicle 的记忆 Markdown——Session 结束时用小模型提炼关键信息写入。成本增量约 200-500 tokens/session。</p>
 
         <div class="sol-box">
           <h4>💡 渐进落地</h4>
           <ul>
-            <li><strong>430 内测版可做：</strong>每个 Workspace 增加 Context Summary 字段，Session 结束时自动提炼 3-5 条关键信息。</li>
-            <li><strong>515 版演进：</strong>Context Summary 支持 AM 手动编辑（和 Chronicle 一样"unencrypted markdown that you can read and modify"），让 AM 可以主动标注决策信息。</li>
+            <li><strong>短期可做：</strong>每个 Workspace 增加 Context Summary 字段，Session 结束时自动提炼 3-5 条关键信息。</li>
+            <li><strong>中期演进：</strong>Context Summary 支持 AM 手动编辑（和 Chronicle 一样"unencrypted markdown that you can read and modify"），让 AM 可以主动标注决策信息。</li>
             <li><strong>验证指标：</strong>同一 Workspace 下的追问轮次减少率、AM 手动重复描述背景的频次。</li>
           </ul>
         </div>
@@ -509,9 +507,9 @@
         <div class="sol-box">
           <h4>💡 落地节奏</h4>
           <ul>
-            <li><strong>430 版：</strong>Session Memory 上线（已有方案）。个人级做最简版——记录常查商家、常用看板、偏好语言。</li>
-            <li><strong>515 版：</strong>个人级增加自动 consolidation（每日/每周一次），让 Tiko 学习工作模式而非被动存储。</li>
-            <li><strong>619 版：</strong>Workspace Memory 上线，初期仅存储决策线索和经验摘要，不自动生成规则映射。</li>
+            <li><strong>第一步：</strong>Session Memory 上线。个人级做最简版——记录常查商家、常用看板、偏好语言。</li>
+            <li><strong>第二步：</strong>个人级增加自动 consolidation（每日/每周一次），让 Tiko 学习工作模式而非被动存储。</li>
+            <li><strong>第三步：</strong>Workspace Memory 上线，初期仅存储决策线索和经验摘要，不自动生成规则映射。</li>
           </ul>
         </div>
 
@@ -550,7 +548,7 @@
       <div class="detail">
         <p><strong style="color:var(--text)">两个值得关注的方向：</strong></p>
 
-        <div class="hbox hbox-orange"><strong>方向 A — 运营 Routine：</strong>Claude Code Routines 将 prompt + repo + connectors 封装为可复用流程。翻译到 AM 场景——"每周一 8:00 巡检商家 SPS → 标红异常 → 生成周报 → 推送"。Pearl PRD 在 619 版规划了 Scheduled Task 能力，这为 Routine 提供了基础。</div>
+        <div class="hbox hbox-orange"><strong>方向 A — 运营 Routine：</strong>Claude Code Routines 将 prompt + repo + connectors 封装为可复用流程。翻译到 AM 场景——"每周一 8:00 巡检商家 SPS → 标红异常 → 生成周报 → 推送"。Pearl 规划了 Scheduled Task 能力，这为 Routine 提供了基础。</div>
 
         <div class="hbox hbox-accent"><strong>方向 B — Agent 分层：</strong>Chronicle 呈现了"前台交互 Agent + 后台感知 Agent"分离运行的形态。Pearl 2.0 可以考虑类似思路——Tiko 前台处理对话，后台有专门的"数据巡检 Agent"或"风险监控 Agent"持续更新 Workspace Context。</div>
 
@@ -564,7 +562,7 @@
         <div class="sol-box">
           <h4>💡 建议的渐进路径</h4>
           <ul>
-            <li><strong>619 版（确定可做）：</strong>先做"定时触发"——AM 手动设置"每天 10 点检查商家罚单"，Tiko 执行查询并推送。这是最简单、最可控的 Routine。</li>
+            <li><strong>近期可做：</strong>先做"定时触发"——AM 手动设置"每天 10 点检查商家罚单"，Tiko 执行查询并推送。这是最简单、最可控的 Routine。</li>
             <li><strong>H2（可探索）：</strong>从高频、低分歧的固定操作开始尝试 Routine 模板和后台巡检 Agent。</li>
             <li><strong>更远期（需验证后再推进）：</strong>Routine 模板共享、Copilot 主动建议自动化等。</li>
           </ul>
@@ -574,7 +572,7 @@
 
     <div class="tldr-bar">
       <h3>📌 一句话总结</h3>
-      <p>Chronicle 验证了"Agent 自动获取上下文"的重要性，但 Pearl 不应复制它的视觉感知路线。Pearl 的优势在于<strong style="color:var(--text)">页面可被结构化读取（AI Accessible）</strong>，这比截屏更准确、更安全、更便宜。在此基础上，Workspace 隔离、Memory 分层、成本分级感知这几个方向值得推进，但要注意：<strong style="color:var(--text)">Memory 不等于知识库，Routine 不等于全自动化</strong>——先把基础链路跑通，再谈生态扩展。</p>
+      <p>Chronicle 验证了"Agent 自动获取上下文"的重要性，但 Pearl 选择了不同于视觉感知的路线。Pearl 的优势在于<strong style="color:var(--text)">页面可被结构化读取（AI Accessible）</strong>，这比截屏更准确、更安全、更便宜。在此基础上，Workspace 隔离、Memory 分层、成本分级感知这几个方向值得推进，但要注意：<strong style="color:var(--text)">Memory 不等于知识库，Routine 不等于全自动化</strong>——先把基础链路跑通，再谈生态扩展。</p>
     </div>
   </div>
 
